@@ -59,6 +59,7 @@ ParticleFilterChassis<1000> chassis(drivetrain, linearSettings, angularSettings,
  * This function sets motor brake modes and encoder units during initialization.
  */
 void initialize() {
+    chassis.initialize(false);
 }
 
 

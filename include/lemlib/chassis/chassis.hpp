@@ -8,7 +8,6 @@
 #include "lemlib/pid.hpp"
 #include "lemlib/exitcondition.hpp"
 #include "lemlib/driveCurve.hpp"
-#include "localization/distance.hpp"
 
 namespace lemlib {
 
@@ -928,7 +927,7 @@ class Chassis {
         ControllerSettings lateralSettings;
         ControllerSettings angularSettings;
         Drivetrain drivetrain;
-        std::vector<std::unique_ptr<Distance>>& sensors;
+        OdomSensors sensors;
         DriveCurve* throttleCurve;
         DriveCurve* steerCurve;
 
