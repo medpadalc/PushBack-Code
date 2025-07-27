@@ -5,12 +5,13 @@
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/odom.hpp"
 #include "particle_filter.hpp"
+#include "logger.hpp"
 
 
 template<size_t N>
-class ParticleFilterChassis: public lemlib::Chassis {
+class UpgradedChassis: public lemlib::Chassis {
 public:
-    explicit ParticleFilterChassis(
+    explicit UpgradedChassis(
         lemlib::Drivetrain drivetrain,
         lemlib::ControllerSettings linearSettings,
         lemlib::ControllerSettings angularSettings,
@@ -27,14 +28,13 @@ public:
         }
     }
 
-    void odomUpdate() {
+    void mclUpdate() {
         uint64_t start = pros::micros();
 
         // Get the change in movement
         const lemlib::Pose before = getPose(true, true);
         lemlib::update();
-        const lemlib::Pose after = getPose(true, true);
-        const lemlib::Pose change = after - before;
+        const lemlib::Pose change = getPose(true, true) - before;
 
         std::normal_distribution<> xDistribution(0, DRIVE_NOISE * std::fabs(change.x) + 0.001);
         std::normal_distribution<> yDistribution(0, DRIVE_NOISE * std::fabs(change.y) + 0.001);
@@ -55,21 +55,14 @@ public:
         const auto prediction = pf.getPrediction();
         setPose(prediction.x(), prediction.y(), M_PI_2 - prediction.z(), true, false);
 
-        updateTimeMicros = pros::micros() - start;
-    }
-
-    [[nodiscard]] bool isOdomTooSlow() const {
-        // If the odom is taking more than 10ms it is too slow
-        return updateTimeMicros > 10000;
+        uint64_t duration = pros::micros() - start;
+        logging::getLogger()->debug("MCL update took {} microseconds", duration);
+        if (duration > 10000) {
+            logging::getLogger()->warn("MCL update took too long");
+        }
     }
 
     void initialize(const bool mcl) {
-        // If not running mcl just do normal calibration with normal odom
-        if (!mcl) {
-            calibrate();
-            return;
-        }
-
         if (sensors.imu != nullptr) {
             int attempt = 1;
             // calibrate inertial, and if calibration fails, then repeat 5 times or until successful
@@ -83,13 +76,13 @@ public:
                     break;
                 }
                 // indicate error
-                lemlib::infoSink()->warn("IMU failed to calibrate! Attempt #{}", attempt);
+                logging::getLogger()->warn("IMU failed to calibrate! Attempt #{}", attempt);
                 attempt++;
             }
             // check if calibration attempts were successful
             if (attempt > 5) {
                 sensors.imu = nullptr;
-                lemlib::infoSink()->error("IMU calibration failed, defaulting to tracking wheels / motor encoders");
+                logging::getLogger()->error("IMU calibration failed, defaulting to tracking wheels / motor encoders");
                 pros::c::controller_rumble(pros::E_CONTROLLER_MASTER, "---");
             }
         }
@@ -107,10 +100,16 @@ public:
         if (sensors.horizontal2 != nullptr) sensors.horizontal2->reset();
         lemlib::setSensors(sensors, drivetrain);
 
-        if (odomTask == nullptr) {
-            odomTask = new pros::Task([this]() {
+        if (trackingTask == nullptr) {
+            trackingTask = new pros::Task([this, mcl]() {
                while (true) {
-                   odomUpdate();
+                   if (mcl) {
+                       mclUpdate();
+                   }
+                   else {
+                       lemlib::update();
+                   }
+
                    pros::delay(10);
                }
             });
@@ -122,8 +121,7 @@ public:
 
 protected:
     ParticleFilter<N> pf;
-    unsigned long long updateTimeMicros = 0;
-    pros::Task* odomTask = nullptr;
+    pros::Task* trackingTask = nullptr;
 };
 
 

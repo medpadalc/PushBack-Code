@@ -4,7 +4,6 @@
 #include "lemlib/pose.hpp"
 
 namespace lemlib {
-void update();
 /**
  * @brief Set the sensors to be used for odometry
  *

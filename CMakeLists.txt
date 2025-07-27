@@ -44,6 +44,7 @@ add_executable(PROS_Project ${SOURCES}
         include/localization/lemlib_integration.hpp
         include/localization/constants.hpp
         include/drive_curve.hpp
+        include/logger.hpp
 )
 
 # Optionally, link to external libraries if necessary

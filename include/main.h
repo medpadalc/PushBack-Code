@@ -42,6 +42,12 @@
 //#include "okapi/api.hpp"
 #include "localization/lemlibIntegration.hpp"
 #include "driveCurve.hpp"
+#include "robodash/views/selector.hpp"
+#include "logger.hpp"
+
+#define PARTICLES 500
+extern UpgradedChassis<PARTICLES> chassis;
+
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

@@ -19,7 +19,8 @@ namespace lemlib {
  */
 class BaseSink {
     public:
-        BaseSink() = default;
+    virtual ~BaseSink() = default;
+    BaseSink() = default;
 
         /**
          * @brief Construct a new combined sink

@@ -1,6 +1,5 @@
 #include "driveCurve.hpp"
 
-
 // Constants for drive curve adjustments
 constexpr int32_t DRIVE_CURVE_THRESHOLD = 127;
 constexpr int32_t DRIVE_CURVE_MULTIPLIER = 21;

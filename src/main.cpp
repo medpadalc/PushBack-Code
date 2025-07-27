@@ -49,9 +49,11 @@ Distance leftDistanceSensor(11, {0, 0, M_PI_2});
 std::vector pfSensors = {&frontDistanceSensor, &rightDistanceSensor, &leftDistanceSensor};
 
 
-ParticleFilterChassis<1000> chassis(drivetrain, linearSettings, angularSettings,
+UpgradedChassis<PARTICLES> chassis(drivetrain, linearSettings, angularSettings,
     sensors, pfSensors);
 
+
+rd::Selector selector({});
 
 /**
  * @brief Initializes the robot's motors and sensors.
@@ -59,6 +61,8 @@ ParticleFilterChassis<1000> chassis(drivetrain, linearSettings, angularSettings,
  * This function sets motor brake modes and encoder units during initialization.
  */
 void initialize() {
+    logging::getLogger()->setLowestLevel(lemlib::Level::DEBUG);
+    logging::getLogger()->info("Starting logging");
     chassis.initialize(false);
 }
 
@@ -100,4 +104,6 @@ void competition_initialize() {}
  *
  * This function is executed when the robot enters autonomous mode in competition.
  */
-void autonomous() {}
+void autonomous() {
+    selector.run_auton();
+}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 constexpr float MM_TO_IN = 1 / 25.4;
 constexpr float M_TO_IN = 39.3701;
 
