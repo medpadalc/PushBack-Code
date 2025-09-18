@@ -1,8 +1,8 @@
 #include "main.h"
 
 
-pros::MotorGroup leftMotors({1, 2, 3}, pros::MotorCartridge::blue);
-pros::MotorGroup rightMotors({4, 5, 6}, pros::MotorCartridge::blue);
+pros::MotorGroup leftMotors({1, -2, 3}, pros::MotorCartridge::blue);
+pros::MotorGroup rightMotors({-4, 5, -6}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
@@ -61,8 +61,7 @@ rd::Selector selector({});
  * This function sets motor brake modes and encoder units during initialization.
  */
 void initialize() {
-    logging::getLogger()->setLowestLevel(lemlib::Level::DEBUG);
-    logging::getLogger()->info("Starting logging");
+    printf("Starting logging");
     chassis.initialize(false);
 }
 

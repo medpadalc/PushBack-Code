@@ -5,7 +5,6 @@
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/odom.hpp"
 #include "particle_filter.hpp"
-#include "logger.hpp"
 
 
 template<size_t N>
@@ -36,9 +35,9 @@ public:
         lemlib::update();
         const lemlib::Pose change = getPose(true, true) - before;
 
-        std::normal_distribution<> xDistribution(0, DRIVE_NOISE * std::fabs(change.x) + 0.001);
-        std::normal_distribution<> yDistribution(0, DRIVE_NOISE * std::fabs(change.y) + 0.001);
-        std::normal_distribution<> angleDistribution(0, ANGLE_NOISE * std::fabs(change.theta) + 0.001);
+        std::uniform_real_distribution<> xDistribution(-DRIVE_NOISE * std::fabs(change.x), DRIVE_NOISE * std::fabs(change.x));
+        std::uniform_real_distribution<> yDistribution(-DRIVE_NOISE * std::fabs(change.y), DRIVE_NOISE * std::fabs(change.y));
+        std::uniform_real_distribution<> angleDistribution(-ANGLE_NOISE * std::fabs(change.theta), ANGLE_NOISE * std::fabs(change.theta));
 
         static auto& randomGen = pf.getRandomGen();
 
@@ -56,33 +55,20 @@ public:
         setPose(prediction.x(), prediction.y(), M_PI_2 - prediction.z(), true, false);
 
         uint64_t duration = pros::micros() - start;
-        logging::getLogger()->debug("MCL update took {} microseconds", duration);
+        printf("MCL update took %llu microseconds, pose: (%.2f, %.2f, %.2f)\n", duration, prediction.x(), prediction.y(), (M_PI_2 - prediction.z()) * 180 / M_PI);
         if (duration > 10000) {
-            logging::getLogger()->warn("MCL update took too long");
+            printf("MCL Update took too long\n");
         }
+
     }
 
     void initialize(const bool mcl) {
         if (sensors.imu != nullptr) {
-            int attempt = 1;
-            // calibrate inertial, and if calibration fails, then repeat 5 times or until successful
-            while (attempt <= 5) {
-                sensors.imu->reset();
-                // wait until IMU is calibrated
-                do pros::delay(10);
-                while (sensors.imu->get_status() != pros::ImuStatus::error && sensors.imu->is_calibrating());
-                // exit if imu has been calibrated
-                if (!isnanf(sensors.imu->get_heading()) && !isinf(sensors.imu->get_heading())) {
-                    break;
-                }
-                // indicate error
-                logging::getLogger()->warn("IMU failed to calibrate! Attempt #{}", attempt);
-                attempt++;
-            }
+            int32_t result = sensors.imu->reset(true);
             // check if calibration attempts were successful
-            if (attempt > 5) {
+            if (result == PROS_ERR) {
                 sensors.imu = nullptr;
-                logging::getLogger()->error("IMU calibration failed, defaulting to tracking wheels / motor encoders");
+                printf("IMU calibration failed, defaulting to tracking wheels / motor encoders");
                 pros::c::controller_rumble(pros::E_CONTROLLER_MASTER, "---");
             }
         }
