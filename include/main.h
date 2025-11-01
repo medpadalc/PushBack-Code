@@ -40,12 +40,14 @@
  * You should add more #includes here
  */
 //#include "okapi/api.hpp"
-#include "localization/lemlibIntegration.hpp"
+//#include "localization/lemlibIntegration.hpp"
 #include "driveCurve.hpp"
 #include "robodash/views/selector.hpp"
+#include "autons.hpp"
+#include "lemlib/api.hpp"
 
-#define PARTICLES 500
-extern UpgradedChassis<PARTICLES> chassis;
+//#define PARTICLES 500
+extern lemlib::Chassis chassis;
 
 
 /**
