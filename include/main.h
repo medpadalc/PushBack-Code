@@ -48,6 +48,10 @@
 
 //#define PARTICLES 500
 extern lemlib::Chassis chassis;
+extern pros::adi::Pneumatics hood;
+extern pros::adi::Pneumatics matchload;
+extern pros::MotorGroup mainIntake;
+extern pros::Motor endIntake;
 
 
 /**

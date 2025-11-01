@@ -1,8 +1,8 @@
 #include "main.h"
 
 
-pros::MotorGroup leftMotors({2, 1, 3}, pros::MotorCartridge::blue);
-pros::MotorGroup rightMotors({-5, -4, -6}, pros::MotorCartridge::blue);
+pros::MotorGroup leftMotors({-4, -5, -6}, pros::MotorCartridge::blue);
+pros::MotorGroup rightMotors({2, 1, 3}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
@@ -11,16 +11,16 @@ pros::Motor endIntake(20);
 
 pros::Imu imu(15);
 
-pros::Rotation verticalTrackingWheelRotation(5);
+pros::Rotation verticalTrackingWheelRotation(21);
 lemlib::TrackingWheel verticalTrackingWheel(&verticalTrackingWheelRotation, 2, 0);
 
 pros::Rotation horizontalTrackingWheelRotation(8);
-lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2, -5);
+lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2, -4);
 
 
 lemlib::OdomSensors sensors(&verticalTrackingWheel,
-                            &horizontalTrackingWheel,
                             nullptr,
+                            &horizontalTrackingWheel,
                             nullptr,
                             &imu // inertial sensor
 );
@@ -41,12 +41,12 @@ lemlib::ControllerSettings linearSettings(10, // proportional gain (kP)
 // angular PID controller
 lemlib::ControllerSettings angularSettings(2, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              10, // derivative gain (kD)
-                                              0, // anti windup
-                                              0, // small error range, in degrees
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in degrees
-                                              0, // large error range timeout, in milliseconds
+                                              8, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in degrees
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in degrees
+                                              500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 
@@ -69,8 +69,8 @@ rd::Selector selector({
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::adi::Pneumatics matchload('G', true);
-pros::adi::Pneumatics hood('A', false);
+pros::adi::Pneumatics matchload('G',false);
+pros::adi::Pneumatics hood('B', false);
 
 /**
  * @brief Initializes the robot's motors and sensors.
@@ -80,14 +80,12 @@ pros::adi::Pneumatics hood('A', false);
 void initialize() {
     printf("Starting logging");
     chassis.calibrate();
-    chassis.setPose(0, 0, 0);
     
     pros::Task{[&]() {
         while (true) {
             lemlib::Pose pose = chassis.getPose(false, false);
-            controller.print(0, 0, "%.1f", imu.get_heading());
-            //controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
-            pros::delay(1000);
+            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+            pros::delay(50);
         }
     }};
     
@@ -105,9 +103,9 @@ void opcontrol() {
         int32_t leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         auto [throttle, turn] = driveCurve({leftY, rightX});
-        chassis.tank(throttle - turn, throttle + turn, true);
+        chassis.tank(throttle + turn, throttle - turn, true);
         
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
             mainIntake.move(127);
             endIntake.move(-127);
         }
@@ -115,7 +113,7 @@ void opcontrol() {
             mainIntake.move(127);
             endIntake.move(127);
         }
-        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
             mainIntake.move(-127);
             endIntake.move(-127);
         }
@@ -124,18 +122,16 @@ void opcontrol() {
             endIntake.move(0);
         }
 
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
             hood.toggle();
         }
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
             matchload.toggle();
         }
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             autonomous();
         }
-        lemlib::Pose pose = chassis.getPose(false, false);
-        
-        //controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+
         pros::delay(10);
     }
 }
@@ -159,6 +155,5 @@ void competition_initialize() {}
  * This function is executed when the robot enters autonomous mode in competition.
  */
 void autonomous() {
-    tunePid();
-    //selector.run_auton();
+    selector.run_auton();
 }
