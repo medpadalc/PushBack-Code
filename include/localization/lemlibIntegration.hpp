@@ -4,7 +4,7 @@
 #include "pros/rtos.hpp"
 #include "lemlib/api.hpp"
 #include "lemlib/chassis/odom.hpp"
-#include "particle_filter.hpp"
+#include "particleFilter.hpp"
 
 
 template<size_t N>

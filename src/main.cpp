@@ -1,17 +1,25 @@
 #include "main.h"
 
 
-pros::MotorGroup leftMotors({1, -2, 3}, pros::MotorCartridge::blue);
-pros::MotorGroup rightMotors({-4, 5, -6}, pros::MotorCartridge::blue);
+pros::MotorGroup leftMotors({10, -9, -8}, pros::MotorCartridge::blue);
+pros::MotorGroup rightMotors({-2, 3, 1}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
-pros::Imu imu(7);
-pros::Rotation verticalTrackingWheelRotation(8);
+pros::MotorGroup mainIntake({4, 5});
+pros::Motor endIntake(6);
+
+pros::Imu imu(4);
+
+pros::Rotation verticalTrackingWheelRotation(5);
 lemlib::TrackingWheel verticalTrackingWheel(&verticalTrackingWheelRotation, 2, 0);
 
+pros::Rotation horizontalTrackingWheelRotation(6);
+lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2, 0);
+
+
 lemlib::OdomSensors sensors(&verticalTrackingWheel,
-                            nullptr,
+                            &horizontalTrackingWheel,
                             nullptr,
                             nullptr,
                             &imu // inertial sensor
@@ -43,9 +51,9 @@ lemlib::ControllerSettings angularSettings(2, // proportional gain (kP)
 );
 
 
-Distance frontDistanceSensor(9, {0, 0, 0});
-Distance rightDistanceSensor(10, {0, 0, -M_PI_2});
-Distance leftDistanceSensor(11, {0, 0, M_PI_2});
+Distance frontDistanceSensor(11, {0, 0, 0});
+Distance rightDistanceSensor(12, {0, 0, -M_PI_2});
+Distance leftDistanceSensor(13, {0, 0, M_PI_2});
 std::vector pfSensors = {&frontDistanceSensor, &rightDistanceSensor, &leftDistanceSensor};
 
 
@@ -55,6 +63,8 @@ UpgradedChassis<PARTICLES> chassis(drivetrain, linearSettings, angularSettings,
 
 rd::Selector selector({});
 
+pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
 /**
  * @brief Initializes the robot's motors and sensors.
  *
@@ -63,6 +73,13 @@ rd::Selector selector({});
 void initialize() {
     printf("Starting logging");
     chassis.initialize(false);
+
+    pros::Task{[&]() {
+        while (true) {
+            lemlib::Pose pose = chassis.getPose(false, false);
+            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+        }
+    }};
 }
 
 
@@ -73,13 +90,31 @@ void initialize() {
  * and applies movement commands to the robot's motors.
  */
 void opcontrol() {
-    pros::Controller controller(pros::E_CONTROLLER_MASTER);
-
     while (true) {
         int32_t leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         auto [throttle, turn] = driveCurve({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
+
+        static bool topGoalScoring = true;
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            topGoalScoring = !topGoalScoring;
+            if (!topGoalScoring) {
+                controller.rumble("..");
+            }
+        }
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+            mainIntake.move(127);
+            endIntake.move(topGoalScoring ? 127 : -127);
+        }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+            mainIntake.move(-127);
+            endIntake.move(-127);
+        }
+        else {
+            mainIntake.move(0);
+            endIntake.move(0);
+        }
 
         pros::delay(10);
     }
