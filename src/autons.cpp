@@ -83,35 +83,38 @@ void left() {
     chassis.waitUntilDone();
     pros::delay(500);
     chassis.moveToPose(-9, 9,315, 2000, {.forwards = false, .maxSpeed = 50});
-    pros::delay(1000);
+    pros::delay(1500);
     front.move(127);
-    middle.move(127);
-    endIntake.move(-127);
+    middle.move(100);
+    endIntake.move(-100);
     chassis.waitUntilDone();
-    pros::delay(1700);
-    chassis.moveToPoint(-40, 44, 2500, {.maxSpeed = 70, .earlyExitRange = 3});
+    pros::delay(1400);
+    chassis.moveToPoint(-40, 46, 2500, {.maxSpeed = 70, .earlyExitRange = 3});
     front.move(100);
     chassis.turnToHeading(-90, 2000, {.maxSpeed = 70});
     chassis.waitUntilDone();
-    chassis.moveToPoint(-30, 46, 3000, {.forwards = false, .maxSpeed = 70});
+
 
     matchload.extend();
     chassis.waitUntilDone();
     mainIntake.move(127);
     hood.retract();
     endIntake.move(127);
-    pros::delay(1000);
-    chassis.moveToPoint(-90, 46, 3500, {.maxSpeed = 70});
+    pros::delay(700);
+    chassis.moveToPoint(-90, 48, 2000, {.maxSpeed = 70});
     hood.extend();
     chassis.waitUntilDone();
-    pros::delay(500);
+    pros::delay(300);
 
-    chassis.moveToPoint(-30, 46, 2000, {.forwards = false, .maxSpeed = 70});
-    mainIntake.move(0);
+    chassis.moveToPoint(-25, 48, 2000, {.forwards = false, .maxSpeed = 70});
+
+
     hood.retract();
     chassis.waitUntilDone();
     mainIntake.move(127);
-    pros::delay(500);
+    endIntake.move(127);
+
+    pros::delay(1500);
 }
 
 void right() {
