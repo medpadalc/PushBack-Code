@@ -6,19 +6,13 @@ pros::MotorGroup rightMotors({2, 1, 3}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
-pros::MotorGroup mainIntake({9, -10});
-pros::Motor endIntake(20);
-
 pros::Imu imu(15);
 
-pros::Rotation verticalTrackingWheelRotation(21);
-lemlib::TrackingWheel verticalTrackingWheel(&verticalTrackingWheelRotation, 2, 0);
-
 pros::Rotation horizontalTrackingWheelRotation(8);
-lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2, -4);
+lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2.75, -4);
 
 
-lemlib::OdomSensors sensors(&verticalTrackingWheel,
+lemlib::OdomSensors sensors(nullptr,
                             nullptr,
                             &horizontalTrackingWheel,
                             nullptr,
@@ -49,15 +43,16 @@ lemlib::ControllerSettings angularSettings(2, // proportional gain (kP)
                                               500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
-
-/*Distance frontDistanceSensor(11, {0, 0, 0});
+/*
+Distance frontDistanceSensor(11, {0, 0, 0});
 Distance rightDistanceSensor(12, {0, 0, -M_PI_2});
 Distance leftDistanceSensor(13, {0, 0, M_PI_2});
-std::vector pfSensors = {&frontDistanceSensor, &rightDistanceSensor, &leftDistanceSensor};
 */
+std::vector<Distance*> pfSensors = {};
 
-lemlib::Chassis chassis(drivetrain, linearSettings, angularSettings,
-    sensors);
+
+localization::UpgradedChassis<PARTICLES> chassis(drivetrain, linearSettings, angularSettings,
+    sensors, pfSensors);
 
 
 rd::Selector selector({
@@ -69,8 +64,6 @@ rd::Selector selector({
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::adi::Pneumatics matchload('G',false);
-pros::adi::Pneumatics hood('B', false);
 
 /**
  * @brief Initializes the robot's motors and sensors.
@@ -104,29 +97,24 @@ void opcontrol() {
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         auto [throttle, turn] = driveCurve({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
-        
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            mainIntake.move(127);
-            endIntake.move(-127);
+
+        subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            goal = subsystems::intake::GoalType::MEDIUM_GOAL;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-            mainIntake.move(127);
-            endIntake.move(127);
+            goal = subsystems::intake::GoalType::LONG_GOAL;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-            mainIntake.move(-127);
-            endIntake.move(-127);
+            goal = subsystems::intake::GoalType::LOW_GOAL;
         }
-        else {
-            mainIntake.move(0);
-            endIntake.move(0);
-        }
+        subsystems::intake::iterate(goal);
 
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            hood.toggle();
+            subsystems::hood::toggle();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-            matchload.toggle();
+            subsystems::matchload::toggle();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             autonomous();

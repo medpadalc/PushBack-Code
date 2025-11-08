@@ -40,11 +40,11 @@ file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.c")
 # Define the executable target
 add_executable(PROS_Project ${SOURCES}
         include/localization/distance.hpp
-        include/localization/particle_filter.hpp
-        include/localization/lemlib_integration.hpp
+        include/localization/particleFilter.hpp
+        include/localization/lemlibIntegration.hpp
         include/localization/constants.hpp
-        include/drive_curve.hpp
-        include/logger.hpp
+        include/driveCurve.hpp
+        include/subsystems.hpp
 )
 
 # Optionally, link to external libraries if necessary

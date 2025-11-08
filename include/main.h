@@ -40,18 +40,15 @@
  * You should add more #includes here
  */
 //#include "okapi/api.hpp"
-//#include "localization/lemlibIntegration.hpp"
+#include "localization/lemlibIntegration.hpp"
 #include "driveCurve.hpp"
 #include "robodash/views/selector.hpp"
 #include "autons.hpp"
+#include "subsystems.hpp"
 #include "lemlib/api.hpp"
 
-//#define PARTICLES 500
-extern lemlib::Chassis chassis;
-extern pros::adi::Pneumatics hood;
-extern pros::adi::Pneumatics matchload;
-extern pros::MotorGroup mainIntake;
-extern pros::Motor endIntake;
+#define PARTICLES 500
+extern localization::UpgradedChassis<PARTICLES> chassis;
 
 
 /**

@@ -7,6 +7,8 @@
 #include "particleFilter.hpp"
 
 
+namespace localization {
+
 template<size_t N>
 class UpgradedChassis: public lemlib::Chassis {
 public:
@@ -110,5 +112,5 @@ protected:
     pros::Task* trackingTask = nullptr;
 };
 
-
+}
 

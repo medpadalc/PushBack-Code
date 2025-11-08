@@ -49,9 +49,17 @@ cmake_ninja_workdir = C$:/Users/chawk/CLionProjects/untitled/cmake-build-debug/
 
 build cmake_object_order_depends_target_PROS_Project: phony || .
 
-build CMakeFiles/PROS_Project.dir/src/drive_curve.cpp.obj: CXX_COMPILER__PROS_Project_unscanned_Debug C$:/Users/chawk/CLionProjects/untitled/src/drive_curve.cpp || cmake_object_order_depends_target_PROS_Project
+build CMakeFiles/PROS_Project.dir/src/autons.cpp.obj: CXX_COMPILER__PROS_Project_unscanned_Debug C$:/Users/chawk/CLionProjects/untitled/src/autons.cpp || cmake_object_order_depends_target_PROS_Project
   DEFINES = -DUNICODE -D_DEBUG -D_UNICODE
-  DEP_FILE = CMakeFiles\PROS_Project.dir\src\drive_curve.cpp.obj.d
+  DEP_FILE = CMakeFiles\PROS_Project.dir\src\autons.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/chawk/CLionProjects/untitled -IC:/Users/chawk/CLionProjects/untitled/include -IC:/Users/chawk/CLionProjects/untitled/include/subsystems
+  OBJECT_DIR = CMakeFiles\PROS_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\PROS_Project.dir\src
+
+build CMakeFiles/PROS_Project.dir/src/driveCurve.cpp.obj: CXX_COMPILER__PROS_Project_unscanned_Debug C$:/Users/chawk/CLionProjects/untitled/src/driveCurve.cpp || cmake_object_order_depends_target_PROS_Project
+  DEFINES = -DUNICODE -D_DEBUG -D_UNICODE
+  DEP_FILE = CMakeFiles\PROS_Project.dir\src\driveCurve.cpp.obj.d
   FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/chawk/CLionProjects/untitled -IC:/Users/chawk/CLionProjects/untitled/include -IC:/Users/chawk/CLionProjects/untitled/include/subsystems
   OBJECT_DIR = CMakeFiles\PROS_Project.dir
@@ -65,6 +73,14 @@ build CMakeFiles/PROS_Project.dir/src/main.cpp.obj: CXX_COMPILER__PROS_Project_u
   OBJECT_DIR = CMakeFiles\PROS_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\PROS_Project.dir\src
 
+build CMakeFiles/PROS_Project.dir/src/subsystems.cpp.obj: CXX_COMPILER__PROS_Project_unscanned_Debug C$:/Users/chawk/CLionProjects/untitled/src/subsystems.cpp || cmake_object_order_depends_target_PROS_Project
+  DEFINES = -DUNICODE -D_DEBUG -D_UNICODE
+  DEP_FILE = CMakeFiles\PROS_Project.dir\src\subsystems.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/chawk/CLionProjects/untitled -IC:/Users/chawk/CLionProjects/untitled/include -IC:/Users/chawk/CLionProjects/untitled/include/subsystems
+  OBJECT_DIR = CMakeFiles\PROS_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\PROS_Project.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target PROS_Project
@@ -73,7 +89,7 @@ build CMakeFiles/PROS_Project.dir/src/main.cpp.obj: CXX_COMPILER__PROS_Project_u
 #############################################
 # Link the executable PROS_Project.exe
 
-build PROS_Project.exe: CXX_EXECUTABLE_LINKER__PROS_Project_Debug CMakeFiles/PROS_Project.dir/src/drive_curve.cpp.obj CMakeFiles/PROS_Project.dir/src/main.cpp.obj
+build PROS_Project.exe: CXX_EXECUTABLE_LINKER__PROS_Project_Debug CMakeFiles/PROS_Project.dir/src/autons.cpp.obj CMakeFiles/PROS_Project.dir/src/driveCurve.cpp.obj CMakeFiles/PROS_Project.dir/src/main.cpp.obj CMakeFiles/PROS_Project.dir/src/subsystems.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\PROS_Project.dir
