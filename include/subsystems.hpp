@@ -23,6 +23,7 @@ namespace intake {
     void run(GoalType goal);
     void iterate(GoalType goal);
     void stop();
+    std::string getAllianceColorAsString();
     void setAllianceColor(AllianceColor color);
 }
 

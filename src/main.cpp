@@ -73,6 +73,7 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 void initialize() {
     printf("Starting logging");
     chassis.calibrate();
+    subsystems::intake::setAllianceColor(subsystems::intake::AllianceColor::BLUE);
     
     pros::Task{[&]() {
         while (true) {
@@ -99,13 +100,13 @@ void opcontrol() {
         chassis.tank(throttle + turn, throttle - turn, true);
 
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             goal = subsystems::intake::GoalType::MEDIUM_GOAL;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             goal = subsystems::intake::GoalType::LONG_GOAL;
         }
-        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             goal = subsystems::intake::GoalType::LOW_GOAL;
         }
         subsystems::intake::iterate(goal);

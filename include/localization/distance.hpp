@@ -13,7 +13,7 @@ inline float angleDiff(float a, float b) {
 }
 
 // Cheap approximation of normpdf (normal distribution PDF)
-float normPdf(float x, float mu = 0.0, float sigma = 1.0) {
+inline float normPdf(float x, float mu = 0.0, float sigma = 1.0) {
     constexpr float invSqrt2Pi = 0.3989422804014327; // 1 / sqrt(2 * pi)
     float z = (x - mu) / sigma;
     return (invSqrt2Pi / sigma) * std::exp(-0.5 * z * z);

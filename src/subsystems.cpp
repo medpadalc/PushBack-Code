@@ -2,7 +2,7 @@
 
 pros::MotorGroup mainIntakeMotor({9, -10});
 pros::Motor endIntakeMotor(20);
-pros::Optical intakeOpticalSensor(7);
+pros::Optical intakeOpticalSensor(18);
 
 pros::adi::Pneumatics matchloadPiston('G',false);
 pros::adi::Pneumatics hoodPiston('B', false);
@@ -12,6 +12,10 @@ std::shared_ptr<pros::Task> intakingTaskPtr = nullptr;
 subsystems::intake::AllianceColor currentAllianceColor = subsystems::intake::AllianceColor::RED;
 
 void subsystems::intake::run(GoalType goalType) {
+    if (intakingTaskPtr) {
+        stop();
+    }
+
     intakingTaskPtr = std::make_shared<pros::Task>([goalType]() {
         while (true) {
             iterate(goalType);
@@ -21,10 +25,17 @@ void subsystems::intake::run(GoalType goalType) {
 }
 
 void subsystems::intake::iterate(GoalType goalType) {
+    intakeOpticalSensor.set_led_pwm(100);
+    intakeOpticalSensor.set_integration_time(10);
+
+    static bool isSorting = false;
+    static int32_t startedSorting = pros::millis();
+
     switch (goalType) {
         case GoalType::NONE:
             mainIntakeMotor.brake();
             endIntakeMotor.brake();
+            break;
         case GoalType::LOW_GOAL:
             mainIntakeMotor.move(-127);
             endIntakeMotor.move(-127);
@@ -38,9 +49,18 @@ void subsystems::intake::iterate(GoalType goalType) {
             double hue = intakeOpticalSensor.get_hue();
             if (
                     intakeOpticalSensor.get_proximity() > 200 &&
-                    ((currentAllianceColor == AllianceColor::BLUE && hue > 200 && hue < 260) ||
-                    (currentAllianceColor == AllianceColor::RED && (hue > 330 || hue < 30)))
+                    ((currentAllianceColor == AllianceColor::RED && hue > 200 && hue < 260) ||
+                    (currentAllianceColor == AllianceColor::BLUE && (hue > 330 || hue < 30)))
                 ) {
+                isSorting = true;
+                startedSorting = pros::millis();
+            }    
+
+            if (pros::millis() - startedSorting > 20) {
+                isSorting = false;
+            }
+
+            if (isSorting) {
                 endIntakeMotor.move(-127);
             } else {
                 endIntakeMotor.move(127);
@@ -49,8 +69,20 @@ void subsystems::intake::iterate(GoalType goalType) {
 }
 
 void subsystems::intake::stop() {
-    intakingTaskPtr->remove();
-    intakingTaskPtr = nullptr;
+    if (intakingTaskPtr) {
+        intakingTaskPtr->remove();
+        intakingTaskPtr = nullptr;
+    }
+
+    mainIntakeMotor.brake();
+    endIntakeMotor.brake();
+}
+
+std::string subsystems::intake::getAllianceColorAsString() {
+    if (currentAllianceColor == AllianceColor::RED) {
+        return "RED";
+    }
+    return "BLUE";
 }
 
 void subsystems::intake::setAllianceColor(AllianceColor color) {
