@@ -65,6 +65,7 @@ void subsystems::intake::iterate(GoalType goalType) {
             } else {
                 endIntakeMotor.move(127);
             }
+            break;
     }
 }
 
@@ -88,7 +89,7 @@ std::string subsystems::intake::getAllianceColorAsString() {
     if (currentAllianceColor == AllianceColor::DISABLED) {
         return "DISABLED";
     }
-    __builtin_unreachable()
+    std::unreachable();
 }
 
 void subsystems::intake::setAllianceColor(AllianceColor color) {
@@ -99,7 +100,7 @@ void subsystems::intake::toggleAllianceColor() {
     if (currentAllianceColor == AllianceColor::RED || currentAllianceColor == AllianceColor::DISABLED) {
         setAllianceColor(AllianceColor::BLUE);
     } else {
-        setAllianceColor(AllianceColor:RED);
+        setAllianceColor(AllianceColor::RED);
     }
 }
 
