@@ -9,7 +9,7 @@ pros::adi::Pneumatics hoodPiston('B', false);
 pros::adi::Pneumatics wingPiston('H', false);
 
 std::shared_ptr<pros::Task> intakingTaskPtr = nullptr;
-subsystems::intake::AllianceColor currentAllianceColor = subsystems::intake::AllianceColor::RED;
+subsystems::intake::AllianceColor currentAllianceColor = subsystems::intake::AllianceColor::DISABLED;
 
 void subsystems::intake::run(GoalType goalType) {
     if (intakingTaskPtr) {
@@ -82,11 +82,29 @@ std::string subsystems::intake::getAllianceColorAsString() {
     if (currentAllianceColor == AllianceColor::RED) {
         return "RED";
     }
-    return "BLUE";
+    if (currentAllianceColor == AllianceColor::BLUE) {
+        return "BLUE";
+    }
+    if (currentAllianceColor == AllianceColor::DISABLED) {
+        return "DISABLED";
+    }
+    __builtin_unreachable()
 }
 
 void subsystems::intake::setAllianceColor(AllianceColor color) {
     currentAllianceColor = color;
+}
+
+void subsystems::intake::toggleAllianceColor() {
+    if (currentAllianceColor == AllianceColor::RED || currentAllianceColor == AllianceColor::DISABLED) {
+        setAllianceColor(AllianceColor::BLUE);
+    } else {
+        setAllianceColor(AllianceColor:RED);
+    }
+}
+
+void subsystems::intake::disableColorSort() {
+    setAllianceColor(AllianceColor::DISABLED);
 }
 
 void subsystems::hood::open() {

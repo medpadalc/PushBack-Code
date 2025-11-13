@@ -9,7 +9,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
 pros::Imu imu(15);
 
 pros::Rotation horizontalTrackingWheelRotation(8);
-lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, 2.75, -4);
+lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, -3.5);
 
 
 lemlib::OdomSensors sensors(nullptr,
@@ -73,12 +73,13 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 void initialize() {
     printf("Starting logging");
     chassis.calibrate();
-    subsystems::intake::setAllianceColor(subsystems::intake::AllianceColor::BLUE);
+    subsystems::intake::setAllianceColor(subsystems::intake::AllianceColor::DISABLED);
     
     pros::Task{[&]() {
         while (true) {
             lemlib::Pose pose = chassis.getPose(false, false);
-            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+            controller.print(0, 0, "%s X: %.1f Y: %.1f θ: %.1f",
+                subsystems::intake::getAllianceColorAsString().c_str(), pose.x, pose.y, pose.theta);
             pros::delay(50);
         }
     }};
@@ -94,11 +95,13 @@ void initialize() {
  */
 void opcontrol() {
     while (true) {
+        // drivetrain
         int32_t leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         auto [throttle, turn] = driveCurve({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
-
+        
+        // intake
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             goal = subsystems::intake::GoalType::MEDIUM_GOAL;
@@ -111,12 +114,26 @@ void opcontrol() {
         }
         subsystems::intake::iterate(goal);
 
+        // intake colorsort
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            subsystems::intake::toggleAllianceColor();
+        }
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+            subsystems::intake::disableColorSort();
+        }
+
+        // pneumatics
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
             subsystems::hood::toggle();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
             subsystems::matchload::toggle();
         }
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+            subsystems::wing::toggle();
+        }
+        
+        // autos
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             autonomous();
         }

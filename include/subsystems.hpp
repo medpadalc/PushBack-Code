@@ -17,7 +17,8 @@ namespace intake {
 
     enum class AllianceColor {
         RED,
-        BLUE
+        BLUE,
+        DISABLED
     };
 
     void run(GoalType goal);
@@ -25,6 +26,8 @@ namespace intake {
     void stop();
     std::string getAllianceColorAsString();
     void setAllianceColor(AllianceColor color);
+    void toggleAllianceColor();
+    void disableColorSort();
 }
 
 namespace hood {
