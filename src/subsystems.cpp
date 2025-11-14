@@ -4,9 +4,9 @@ pros::MotorGroup mainIntakeMotor({9, -10});
 pros::Motor endIntakeMotor(20);
 pros::Optical intakeOpticalSensor(18);
 
-pros::adi::Pneumatics matchloadPiston('G',false);
-pros::adi::Pneumatics hoodPiston('B', false);
-pros::adi::Pneumatics wingPiston('H', false);
+pros::adi::Pneumatics matchloadPiston('H',false);
+pros::adi::Pneumatics hoodPiston('D', false);
+pros::adi::Pneumatics wingPiston('E', false);
 
 std::shared_ptr<pros::Task> intakingTaskPtr = nullptr;
 subsystems::intake::AllianceColor currentAllianceColor = subsystems::intake::AllianceColor::DISABLED;
@@ -25,8 +25,8 @@ void subsystems::intake::run(GoalType goalType) {
 }
 
 void subsystems::intake::iterate(GoalType goalType) {
-    intakeOpticalSensor.set_led_pwm(100);
     intakeOpticalSensor.set_integration_time(10);
+    intakeOpticalSensor.set_led_pwm(100);
 
     static bool isSorting = false;
     static int32_t startedSorting = pros::millis();
@@ -49,7 +49,7 @@ void subsystems::intake::iterate(GoalType goalType) {
             double hue = intakeOpticalSensor.get_hue();
             if (
                     intakeOpticalSensor.get_proximity() > 200 &&
-                    ((currentAllianceColor == AllianceColor::RED && hue > 200 && hue < 260) ||
+                    ((currentAllianceColor == AllianceColor::RED && hue > 180 && hue < 260) ||
                     (currentAllianceColor == AllianceColor::BLUE && (hue > 330 || hue < 30)))
                 ) {
                 isSorting = true;
@@ -81,13 +81,13 @@ void subsystems::intake::stop() {
 
 std::string subsystems::intake::getAllianceColorAsString() {
     if (currentAllianceColor == AllianceColor::RED) {
-        return "RED";
+        return "R";
     }
     if (currentAllianceColor == AllianceColor::BLUE) {
-        return "BLUE";
+        return "B";
     }
     if (currentAllianceColor == AllianceColor::DISABLED) {
-        return "DISABLED";
+        return "D";
     }
     std::unreachable();
 }

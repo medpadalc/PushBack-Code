@@ -6,7 +6,7 @@ pros::MotorGroup rightMotors({2, 1, 3}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
-pros::Imu imu(15);
+pros::Imu imu(7);
 
 pros::Rotation horizontalTrackingWheelRotation(8);
 lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, -3.5);
@@ -21,7 +21,7 @@ lemlib::OdomSensors sensors(nullptr,
 
 
 // lateral PID controller
-lemlib::ControllerSettings linearSettings(10, // proportional gain (kP)
+lemlib::ControllerSettings linearSettings(7, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               3, // derivative gain (kD)
                                               3, // anti windup
@@ -33,9 +33,9 @@ lemlib::ControllerSettings linearSettings(10, // proportional gain (kP)
 );
 
 // angular PID controller
-lemlib::ControllerSettings angularSettings(2, // proportional gain (kP)
+lemlib::ControllerSettings angularSettings(1.65, // proportional gain (kP)
                                               0, // integral gain (kI)
-                                              8, // derivative gain (kD)
+                                              10, // derivative gain (kD)
                                               3, // anti windup
                                               1, // small error range, in degrees
                                               100, // small error range timeout, in milliseconds
@@ -75,11 +75,12 @@ void initialize() {
     chassis.calibrate();
     subsystems::intake::setAllianceColor(subsystems::intake::AllianceColor::DISABLED);
     
+    
     pros::Task{[&]() {
-        while (true) {
+        while (true) {     
             lemlib::Pose pose = chassis.getPose(false, false);
             controller.print(0, 0, "%s X: %.1f Y: %.1f θ: %.1f",
-                subsystems::intake::getAllianceColorAsString().c_str(), pose.x, pose.y, pose.theta);
+            subsystems::intake::getAllianceColorAsString().c_str(), pose.x, pose.y, pose.theta);
             pros::delay(50);
         }
     }};
