@@ -1,6 +1,6 @@
 #include "subsystems.hpp"
 
-pros::MotorGroup mainIntakeMotor({9, -10});
+pros::MotorGroup mainIntakeMotor({-9, 10});
 pros::Motor endIntakeMotor(20);
 pros::Optical intakeOpticalSensor(18);
 

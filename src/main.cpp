@@ -95,6 +95,7 @@ void initialize() {
  * and applies movement commands to the robot's motors.
  */
 void opcontrol() {
+    subsystems::intake::stop();
     while (true) {
         // drivetrain
         int32_t leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
