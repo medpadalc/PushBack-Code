@@ -8,13 +8,13 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
 
 pros::Imu imu(7);
 
-pros::Rotation horizontalTrackingWheelRotation(8);
-lemlib::TrackingWheel horizontalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, -3.5);
+pros::Rotation horizontalTrackingWheelRotation(-8);
+lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, 0.5);
 
 
-lemlib::OdomSensors sensors(nullptr,
+lemlib::OdomSensors sensors(&verticalTrackingWheel,
                             nullptr,
-                            &horizontalTrackingWheel,
+                            nullptr,
                             nullptr,
                             &imu // inertial sensor
 );
@@ -59,7 +59,8 @@ rd::Selector selector({
     {"Solo AWP", solo_awp},
     {"Left", left},
     {"Right", right},
-    {"Tune", tunePid}
+    {"Tune", tunePid}, 
+    {"Skills", skills}
 });
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -137,7 +138,8 @@ void opcontrol() {
         
         // autos
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            autonomous();
+            //autonomous();
+            skills();
         }
 
         pros::delay(10);
