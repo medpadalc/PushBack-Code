@@ -42,7 +42,7 @@ void subsystems::intake::iterate(GoalType goalType) {
             break;
         case GoalType::MEDIUM_GOAL:
             mainIntakeMotor.move(127);
-            endIntakeMotor.move(-127);
+            endIntakeMotor.move(-100);
             break;
         case GoalType::LONG_GOAL:
             mainIntakeMotor.move(127);
