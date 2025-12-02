@@ -12,6 +12,7 @@ namespace intake {
     enum class GoalType {
         LOW_GOAL,
         MEDIUM_GOAL,
+        MEDIUM_GOAL_SLOW,
         LONG_GOAL,
         NONE
     };

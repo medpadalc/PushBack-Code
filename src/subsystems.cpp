@@ -1,7 +1,7 @@
 #include "subsystems.hpp"
 
 pros::MotorGroup mainIntakeMotor({-9, 10});
-pros::Motor endIntakeMotor(20);
+pros::Motor endIntakeMotor(20, pros::MotorGears::rpm_200);
 pros::Optical intakeOpticalSensor(18);
 
 pros::adi::Pneumatics matchloadPiston('H',false);
@@ -42,7 +42,11 @@ void subsystems::intake::iterate(GoalType goalType) {
             break;
         case GoalType::MEDIUM_GOAL:
             mainIntakeMotor.move(127);
-            endIntakeMotor.move(-100);
+            endIntakeMotor.move(-127);
+            break;
+        case GoalType::MEDIUM_GOAL_SLOW:
+            mainIntakeMotor.move(127);
+            endIntakeMotor.move_velocity(120);
             break;
         case GoalType::LONG_GOAL:
             mainIntakeMotor.move(127);
