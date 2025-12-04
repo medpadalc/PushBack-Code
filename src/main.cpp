@@ -101,7 +101,7 @@ void opcontrol() {
         // drivetrain
         int32_t leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        auto [throttle, turn] = driveCurve({leftY, rightX});
+        auto [throttle, turn] = driveCurvePilon({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
 
         // skills
