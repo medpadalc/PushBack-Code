@@ -105,10 +105,11 @@ void opcontrol() {
         chassis.tank(throttle + turn, throttle - turn, true);
         
         // intake
-        subsystems::intake::GoalType middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
+        static subsystems::intake::GoalType middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
             if (middleGoalType == subsystems::intake::GoalType::MEDIUM_GOAL) {
                 middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL_SLOW;
+                controller.rumble(".-");
             } else {
                 middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
             }
