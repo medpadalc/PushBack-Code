@@ -103,21 +103,11 @@ void opcontrol() {
         int32_t rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         auto [throttle, turn] = driveCurve({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
-        
-        // intake
-        static subsystems::intake::GoalType middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-            if (middleGoalType == subsystems::intake::GoalType::MEDIUM_GOAL) {
-                middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL_SLOW;
-                controller.rumble(".-");
-            } else {
-                middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
-            }
-        }
+
 
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-            goal = middleGoalType;
+            goal = subsystems::intake::GoalType::MEDIUM_GOAL;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             goal = subsystems::intake::GoalType::LONG_GOAL;
