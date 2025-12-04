@@ -104,10 +104,18 @@ void opcontrol() {
         auto [throttle, turn] = driveCurve({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
 
+        // skills
+        static subsystems::intake::GoalType middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL;
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+            middleGoalType = subsystems::intake::GoalType::MEDIUM_GOAL_SLOW;
+            subsystems::wing::extend();
+            subsystems::hood::open();
+            controller.rumble("..");
+        }
 
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-            goal = subsystems::intake::GoalType::MEDIUM_GOAL;
+            goal = middleGoalType;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             goal = subsystems::intake::GoalType::LONG_GOAL;
