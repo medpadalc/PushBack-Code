@@ -1,14 +1,14 @@
 #include "main.h"
 
 
-pros::MotorGroup leftMotors({-4, -5, -6}, pros::MotorCartridge::blue);
+pros::MotorGroup leftMotors({-4, -5, -21}, pros::MotorCartridge::blue);
 pros::MotorGroup rightMotors({2, 1, 3}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
 pros::Imu imu(7);
 
-pros::Rotation horizontalTrackingWheelRotation(-8);
+pros::Rotation horizontalTrackingWheelRotation(-6);
 lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, 0.5);
 
 
