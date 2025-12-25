@@ -105,7 +105,7 @@ void opcontrol() {
         chassis.tank(throttle + turn, throttle - turn, true);
 
         // skills
-        static subsystems::intake::GoalType scoreType = subsystems::intake::GoalType::MEDIUM_GOAL;
+        static subsystems::intake::GoalType scoreType = subsystems::intake::GoalType::LONG_GOAL;
 
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
