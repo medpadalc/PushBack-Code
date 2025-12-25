@@ -1,6 +1,6 @@
 #include "autons.hpp"
 
-void example() {
+void example() {/*
     // long goal
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
     pros::delay(1000);
@@ -21,10 +21,11 @@ void example() {
 
     subsystems::matchload::extend();
     subsystems::matchload::retract();
+    */
 }
 
 void solo_awp() {
-
+    /*
     subsystems::wing::extend();
     chassis.setPose(-45, -17.5, 180);
     subsystems::hood::open();
@@ -111,10 +112,11 @@ void solo_awp() {
     subsystems::hood::close();
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
     pros::delay(3000);
-
+    */
 }
 
 void left() {
+    /*
     chassis.setPose(-42, 11 ,90 );
     subsystems::hood::open();
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
@@ -167,8 +169,10 @@ void left() {
     subsystems::matchload::retract();
     chassis.waitUntilDone();
     chassis.tank(0,0);
+    */
 }
 void right() {
+    /*
     chassis.setPose(-42, -12, 90 );
     subsystems::hood::open();
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
@@ -226,9 +230,11 @@ void right() {
     chassis.waitUntilDone();
     chassis.tank(0,0);
     //chassis.swingToHeading(270, DriveSide::LEFT, 500, {.minSpeed = 60});
+    */
 }
 
 void skills(){
+    /*
     subsystems::wing::toggle();
     subsystems::hood::open();
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
@@ -486,10 +492,11 @@ void skills(){
 
     chassis.moveToPoint(59, -1, 200, {.forwards = false, .minSpeed = 100});
     chassis.waitUntilDone();
-
+    */
 
 }
 void tunePid() {
+    /*
     chassis.setPose(28, 44, 90);
     pros::delay(100);
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
@@ -504,4 +511,5 @@ void tunePid() {
 
     chassis.moveToPoint(59, -1, 200, {.forwards = false, .minSpeed = 100});
     chassis.waitUntilDone();
+    */
 }

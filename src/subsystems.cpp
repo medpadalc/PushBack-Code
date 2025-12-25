@@ -1,7 +1,7 @@
 #include "subsystems.hpp"
 
-pros::MotorGroup mainIntakeMotor({-9, 10});
-pros::Motor endIntakeMotor(20, pros::MotorGears::rpm_200);
+pros::Motor lowerIntakeMotor(10, pros::MotorGears::rpm_600);
+pros::Motor upperIntakeMotor(9, pros::MotorGears::rpm_600);
 pros::Optical intakeOpticalSensor(18);
 
 pros::adi::Pneumatics matchloadPiston('H',false);
@@ -33,23 +33,23 @@ void subsystems::intake::iterate(GoalType goalType) {
 
     switch (goalType) {
         case GoalType::NONE:
-            mainIntakeMotor.brake();
-            endIntakeMotor.brake();
+            lowerIntakeMotor.brake();
+            upperIntakeMotor.brake();
             break;
         case GoalType::LOW_GOAL:
-            mainIntakeMotor.move(-127);
-            endIntakeMotor.move(0);
+            lowerIntakeMotor.move(-127);
+            upperIntakeMotor.move(-127);
             break;
         case GoalType::MEDIUM_GOAL:
-            mainIntakeMotor.move(127);
-            endIntakeMotor.move(-127);
+            lowerIntakeMotor.move_velocity(450);
+            upperIntakeMotor.move(-127);
             break;
-        case GoalType::MEDIUM_GOAL_SLOW:
-            mainIntakeMotor.move(127);
-            endIntakeMotor.move_velocity(-80);
+        case GoalType::HOLD_BALLS:
+            lowerIntakeMotor.move(127);
+            upperIntakeMotor.move_velocity(-100);
             break;
         case GoalType::LONG_GOAL:
-            mainIntakeMotor.move(127);
+            lowerIntakeMotor.move(127);
             double hue = intakeOpticalSensor.get_hue();
             if (
                     intakeOpticalSensor.get_proximity() > 200 &&
@@ -65,9 +65,9 @@ void subsystems::intake::iterate(GoalType goalType) {
             }
 
             if (isSorting) {
-                endIntakeMotor.move(-127);
+                upperIntakeMotor.move(-127);
             } else {
-                endIntakeMotor.move(127);
+                upperIntakeMotor.move(127);
             }
             break;
     }
@@ -79,8 +79,8 @@ void subsystems::intake::stop() {
         intakingTaskPtr = nullptr;
     }
 
-    mainIntakeMotor.brake();
-    endIntakeMotor.brake();
+    lowerIntakeMotor.brake();
+    upperIntakeMotor.brake();
 }
 
 std::string subsystems::intake::getAllianceColorAsString() {
@@ -93,7 +93,6 @@ std::string subsystems::intake::getAllianceColorAsString() {
     if (currentAllianceColor == AllianceColor::DISABLED) {
         return "D";
     }
-    std::unreachable();
 }
 
 void subsystems::intake::setAllianceColor(AllianceColor color) {
