@@ -1,12 +1,12 @@
 #include "main.h"
 
 
-pros::MotorGroup leftMotors({-4, -5, -21}, pros::MotorCartridge::blue);
-pros::MotorGroup rightMotors({2, 1, 3}, pros::MotorCartridge::blue);
+pros::MotorGroup leftMotors({-7, -8, -9}, pros::MotorCartridge::blue);
+pros::MotorGroup rightMotors({2, 4, 5}, pros::MotorCartridge::blue);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
     lemlib::Omniwheel::NEW_325, 450, 8);
 
-pros::Imu imu(7);
+pros::Imu imu(19);
 
 pros::Rotation horizontalTrackingWheelRotation(-6);
 lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, 0.5);
@@ -74,14 +74,12 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 void initialize() {
     printf("Starting logging");
     chassis.calibrate();
-    subsystems::intake::setAllianceColor(subsystems::intake::AllianceColor::DISABLED);
     
     
     pros::Task{[&]() {
         while (true) {     
             lemlib::Pose pose = chassis.getPose(false, false);
-            controller.print(0, 0, "%s X: %.1f Y: %.1f θ: %.1f",
-            subsystems::intake::getAllianceColorAsString().c_str(), pose.x, pose.y, pose.theta);
+            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
             pros::delay(50);
         }
     }};
@@ -104,12 +102,12 @@ void opcontrol() {
         auto [throttle, turn] = driveCurvePilon({leftY, rightX});
         chassis.tank(throttle + turn, throttle - turn, true);
 
-        // skills
-        static subsystems::intake::GoalType scoreType = subsystems::intake::GoalType::LONG_GOAL;
-
         subsystems::intake::GoalType goal = subsystems::intake::GoalType::NONE;
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-            goal = scoreType;
+            goal = subsystems::intake::GoalType::LONG_GOAL;
+        }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+            goal = subsystems::intake::GoalType::MEDIUM_GOAL;
         }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             goal = subsystems::intake::GoalType::HOLD_BALLS;
@@ -119,32 +117,19 @@ void opcontrol() {
         }
         subsystems::intake::iterate(goal);
 
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            if (scoreType == subsystems::intake::GoalType::MEDIUM_GOAL) {
-                scoreType = subsystems::intake::GoalType::LONG_GOAL;
-            } else {
-                scoreType = subsystems::intake::GoalType::MEDIUM_GOAL;
-                controller.rumble(".");
-            }
-        }
-
-        // intake colorsort
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-            subsystems::intake::toggleAllianceColor();
-        }
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-            subsystems::intake::disableColorSort();
-        }
 
         // pneumatics
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            subsystems::hood::toggle();
-        }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
             subsystems::matchload::toggle();
         }
-        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-            subsystems::wing::toggle();
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+            subsystems::wing::retract();
+        }
+        else {
+            subsystems::wing::extend();
+        }
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            subsystems::midGoalDescore::toggle();
         }
         
         // autos
