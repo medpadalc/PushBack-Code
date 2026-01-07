@@ -54,6 +54,7 @@ void subsystems::intake::matchloadUntilColorChanges(std::uint32_t timeout) {
     while (initialColor == NONE && (pros::millis() - start) < timeout) {
         iterate(GoalType::HOLD_BALLS);
         initialColor = getColor(intakeOpticalSensor);
+        pros::delay(10);
     }
 
     if (initialColor == NONE) {
@@ -67,6 +68,7 @@ void subsystems::intake::matchloadUntilColorChanges(std::uint32_t timeout) {
            (initialColor == BLUE && currentColor != RED)) && (pros::millis() - start) < timeout) {
         iterate(GoalType::HOLD_BALLS);
         currentColor = getColor(intakeOpticalSensor);
+        pros::delay(10);
     }
 
     stop();
