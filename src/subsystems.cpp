@@ -44,36 +44,6 @@ int getColor(pros::Optical& optical) {
     return NONE;
 }
 
-void subsystems::intake::matchloadUntilColorChanges(std::uint32_t timeout) {
-    intakeOpticalSensor.set_integration_time(10);
-    intakeOpticalSensor.set_led_pwm(100);
-
-    std::uint32_t start = pros::millis();
-
-    int initialColor = NONE;
-    while (initialColor == NONE && (pros::millis() - start) < timeout) {
-        iterate(GoalType::HOLD_BALLS);
-        initialColor = getColor(intakeOpticalSensor);
-        pros::delay(10);
-    }
-
-    if (initialColor == NONE) {
-        stop();
-        return;
-    }
-
-
-    int currentColor = initialColor;
-    while (((initialColor == RED && currentColor != BLUE) ||
-           (initialColor == BLUE && currentColor != RED)) && (pros::millis() - start) < timeout) {
-        iterate(GoalType::HOLD_BALLS);
-        currentColor = getColor(intakeOpticalSensor);
-        pros::delay(10);
-    }
-
-    stop();
-}
-
 
 void subsystems::intake::iterate(GoalType goalType) {
     intakeOpticalSensor.set_integration_time(10);
@@ -92,7 +62,7 @@ void subsystems::intake::iterate(GoalType goalType) {
             break;
         case GoalType::MEDIUM_GOAL:
             middleGoalPiston.retract();
-            lowerIntakeMotor.move(127);
+            lowerIntakeMotor.move_velocity(450);
             upperIntakeMotor.move(-127);
             break;
         case GoalType::HOLD_BALLS:

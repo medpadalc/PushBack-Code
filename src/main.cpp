@@ -8,8 +8,8 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
 
 pros::Imu imu(19);
 
-pros::Rotation horizontalTrackingWheelRotation(-6);
-lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, lemlib::Omniwheel::NEW_275, 0.5);
+pros::Rotation horizontalTrackingWheelRotation(20);
+lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, 2.0, 0);
 
 
 lemlib::OdomSensors sensors(&verticalTrackingWheel,
@@ -21,7 +21,7 @@ lemlib::OdomSensors sensors(&verticalTrackingWheel,
 
 
 // lateral PID controller
-lemlib::ControllerSettings linearSettings(7, // proportional gain (kP)
+lemlib::ControllerSettings linearSettings(6, // proportional gain (kP)
                                               0, // integral gain (kI)
                                               3, // derivative gain (kD)
                                               3, // anti windup
@@ -122,11 +122,8 @@ void opcontrol() {
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
             subsystems::matchload::toggle();
         }
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
-            subsystems::wing::retract();
-        }
-        else {
-            subsystems::wing::extend();
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+            subsystems::wing::toggle();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
             subsystems::midGoalDescore::toggle();

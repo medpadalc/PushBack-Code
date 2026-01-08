@@ -18,7 +18,6 @@ namespace intake {
     };
 
     void run(GoalType goal);
-    void matchloadUntilColorChanges(std::uint32_t timeout);
     void iterate(GoalType goal);
     void stop();
 }
