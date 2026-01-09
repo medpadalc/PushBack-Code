@@ -8,7 +8,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 11.5,
 
 pros::Imu imu(19);
 
-pros::Rotation horizontalTrackingWheelRotation(20);
+pros::Rotation horizontalTrackingWheelRotation(-20);
 lemlib::TrackingWheel verticalTrackingWheel(&horizontalTrackingWheelRotation, 2.0, 0);
 
 

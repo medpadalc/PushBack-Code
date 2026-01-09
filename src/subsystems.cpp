@@ -6,7 +6,7 @@ pros::Optical intakeOpticalSensor(11);
 
 pros::adi::Pneumatics matchloadPiston('H',false);
 pros::adi::Pneumatics middleGoalPiston('F', true, true);
-pros::adi::Pneumatics wingPiston('G', true);
+pros::adi::Pneumatics wingPiston('G', false, true);
 pros::adi::Pneumatics midGoalDescorePiston('E', false, false);
 
 std::shared_ptr<pros::Task> intakingTaskPtr = nullptr;
