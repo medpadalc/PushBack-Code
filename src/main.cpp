@@ -142,7 +142,10 @@ void opcontrol() {
 /**
  * @brief Runs when the robot is disabled in competition mode.
  */
-void disabled() {}
+void disabled() {
+        subsystems::matchload::retract();
+
+}
 
 /**
  * @brief Runs before autonomous mode in competition settings.
