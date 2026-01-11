@@ -94,6 +94,8 @@ void initialize() {
  * and applies movement commands to the robot's motors.
  */
 void opcontrol() {
+     leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+    rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
     subsystems::intake::stop();
     while (true) {
         // drivetrain
