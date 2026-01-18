@@ -45,9 +45,9 @@ void solo_awp() {
 
 
     chassis.moveToPoint(-33, -49.5, 1900, {.forwards = false, .maxSpeed = 100, .minSpeed = 50, .earlyExitRange = 1});
-    chassis.waitUntil(17);
+    chassis.waitUntil(15);
     subsystems::intake::run(subsystems::intake::GoalType::LOW_GOAL);
-    pros::delay(100);
+    pros::delay(125);
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
 
     chassis.cancelMotion();
@@ -58,7 +58,7 @@ void solo_awp() {
     
     chassis.tank(-100, -100);
 
-    pros::delay(1250);
+    pros::delay(1200);
 
     chassis.setPose(-31, -41.5, chassis.getPose().theta);
     pros::delay(50);
@@ -109,9 +109,9 @@ void solo_awp() {
     chassis.tank(-7, -7);
     pros::delay(100);
     chassis.tank(50,50);
-    pros::delay(350);
+    pros::delay(325);
     chassis.tank(-25,-25);
-    pros::delay(75);
+    pros::delay(50);
     chassis.tank(0,0);  
     
     chassis.moveToPoint(-10, 52.45, 600, {.forwards = false, .maxSpeed = 100, .minSpeed = 40, .earlyExitRange = 1});
@@ -119,9 +119,14 @@ void solo_awp() {
     chassis.cancelMotion();
     subsystems::intake::run(subsystems::intake::GoalType::LOW_GOAL);
 
-    chassis.moveToPoint(-10, 52.35, 1900, {.forwards = false, .maxSpeed = 70, .minSpeed = 25, .earlyExitRange = 1});
-    chassis.waitUntil(2);
+    chassis.moveToPoint(-10, 52.35, 200, {.forwards = false, .maxSpeed = 70, .minSpeed = 25, .earlyExitRange = 1});
+    chassis.waitUntilDone();
+    chassis.tank(60, 60);
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
+
+    pros::delay(150);
+    chassis.tank(-127, -127);
+
     pros::delay(3000);
     
 }
@@ -158,7 +163,7 @@ void left() {
 
     */
     
-    chassis.moveToPoint(-35, 40.5, 2000,  {.maxSpeed = 80, .minSpeed = 40});
+    chassis.moveToPoint(-35, 41, 2000,  {.maxSpeed = 80, .minSpeed = 40});
     //subsystems::midGoalDescore::retract();
 
     chassis.waitUntil(15);
@@ -168,9 +173,9 @@ void left() {
 
 
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
-    chassis.turnToPoint(-71, 43, 1100, {.maxSpeed = 80, .minSpeed = 60, .earlyExitRange = 3});
+    chassis.turnToPoint(-71, 43.5, 1100, {.maxSpeed = 80, .minSpeed = 60, .earlyExitRange = 3});
 
-    chassis.moveToPoint(-75.5, 43, 1200, {.maxSpeed = 60, .minSpeed = 45, .earlyExitRange = 1});
+    chassis.moveToPoint(-75.5, 43.5, 1200, {.maxSpeed = 60, .minSpeed = 45, .earlyExitRange = 1});
     chassis.waitUntilDone();
     chassis.tank(-10, -10);
     pros::delay(100);
@@ -179,10 +184,10 @@ void left() {
 
 
 
-    chassis.moveToPoint(-10, 43, 500, {.forwards = false, .maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, 43.25, 500, {.forwards = false, .maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 1});
     chassis.waitUntil(15);
     chassis.cancelMotion();
-    chassis.moveToPoint(-10, 43, 1000, {.forwards = false, .maxSpeed = 60, .minSpeed = 55, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, 43.25, 1000, {.forwards = false, .maxSpeed = 60, .minSpeed = 55, .earlyExitRange = 1});
     chassis.waitUntil(11);
     subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
     subsystems::matchload::retract();
@@ -231,9 +236,9 @@ void right() {
     subsystems::matchload::extend();
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
     
-    chassis.turnToPoint(-71, -43, 1100, {.maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 3});
+    chassis.turnToPoint(-72, -42.5, 1100, {.maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 3});
 
-    chassis.moveToPoint(-71.5, -43, 1000, {.maxSpeed = 50, .minSpeed = 40, .earlyExitRange = 2});
+    chassis.moveToPoint(-73.5, -42.5, 1100, {.maxSpeed = 53, .minSpeed = 42, .earlyExitRange = 2});
     
 
 
@@ -242,11 +247,11 @@ void right() {
     chassis.tank(10, 10);
     pros::delay(150);
 
-    chassis.moveToPoint(-10, -43, 500, {.forwards = false, .maxSpeed = 80, .minSpeed = 40, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, -42.5, 500, {.forwards = false, .maxSpeed = 80, .minSpeed = 40, .earlyExitRange = 1});
     chassis.waitUntil(15);
 
     chassis.cancelMotion();
-    chassis.moveToPoint(-10, -43, 1000, {.forwards = false, .maxSpeed = 40, .minSpeed = 25, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, -42.5, 1000, {.forwards = false, .maxSpeed = 40, .minSpeed = 25, .earlyExitRange = 1});
     chassis.waitUntil(10);
 
     subsystems::intake::run(subsystems::intake::GoalType::LOW_GOAL);
@@ -331,7 +336,7 @@ void skills(){
     subsystems::wing::toggle();
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
     chassis.setPose(49, -17, 270);
-    chassis.moveToPoint(40, -15.5, 2000, {.maxSpeed = 75});
+    chassis.moveToPoint(40, -15.5, 2000, {.maxSpeed = 75, .earlyExitRange = 0.5});
     chassis.moveToPoint(22.5, -24.5, 2000, {.maxSpeed = 55});
     chassis.waitUntil(15);
     subsystems::matchload::extend();
@@ -347,7 +352,7 @@ void skills(){
     subsystems::intake::run(subsystems::intake::GoalType::MEDIUM_GOAL);
 
     chassis.waitUntilDone();
-    pros::delay(1000);
+    pros::delay(900);
     chassis.moveToPoint(40, -45, 2500, {.maxSpeed = 75, .earlyExitRange = 0.5});
     chassis.turnToPoint(68, -48, 2000, {.minSpeed = 30, .earlyExitRange = 7});
 
@@ -362,13 +367,13 @@ void skills(){
     // matchload 1
     chassis.waitUntilDone();
     chassis.tank(-7, -7);
-    pros::delay(200);
+    pros::delay(150);
     chassis.tank(20, 20);
-    pros::delay(650);
+    pros::delay(700);
     chassis.tank(20, 20);
     pros::delay(200);
     chassis.tank(-20, -20);
-    pros::delay(150);
+    pros::delay(125);
     chassis.tank(35, 35);
     pros::delay(1000);
 
@@ -415,16 +420,16 @@ void skills(){
     //matchload 2
     chassis.waitUntilDone();
     chassis.tank(-15, -15);
-    pros::delay(200);
+    pros::delay(150);
     chassis.tank(25, 25);
-    pros::delay(1000);
+    pros::delay(1050);
     chassis.tank(-4, -4);
-    pros::delay(100);
+    pros::delay(75);
     chassis.tank(20, 20);
-    pros::delay(800);
+    pros::delay(950);
 
     chassis.tank(0, 0);
-    pros::delay(200);
+    pros::delay(50);
 
 
 
@@ -447,8 +452,8 @@ void skills(){
     chassis.setPose(-28, -44, 270);
     pros::delay(150);
     chassis.tank(0, 0);
-    chassis.moveToPoint(-32, -44, 350, {.maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 1});
-    chassis.moveToPoint(-28, -44, 500, {.forwards = false, .maxSpeed = 60, .minSpeed = 40, .earlyExitRange = 1});
+    chassis.moveToPoint(-31.5, -44, 250, {.maxSpeed = 75, .minSpeed = 50, .earlyExitRange = 1});
+    chassis.moveToPoint(-28, -44, 350, {.forwards = false, .maxSpeed = 60, .minSpeed = 40, .earlyExitRange = 1});
 
     
 
@@ -511,15 +516,15 @@ void skills(){
 
     chassis.waitUntilDone();
     chassis.tank(-18, -18);
-    pros::delay(200);
+    pros::delay(160);
     chassis.tank(20, 20);
-    pros::delay(900);
+    pros::delay(925);
     chassis.tank(-7, -7);
-    pros::delay(100);
+    pros::delay(85);
     chassis.tank(25, 25);
-    pros::delay(1100);
+    pros::delay(1200);
     chassis.tank(0, 0);
-    pros::delay(200);
+    pros::delay(100);
 
     
     chassis.moveToPoint(-28, 55, 2500, {.forwards = false, .maxSpeed = 65});
@@ -559,23 +564,20 @@ void skills(){
     chassis.setPose(28, 44.5, chassis.getPose().theta);
     pros::delay(100);
 
-    chassis.moveToPoint(32, 44.5, 300, {.maxSpeed = 70, .minSpeed = 40, .earlyExitRange = 1});
-
-    chassis.moveToPoint(28, 44.5, 400, {.forwards = false, .maxSpeed = 65, .minSpeed = 40, .earlyExitRange = 1});
-
+ 
     chassis.moveToPoint(71, 45, 1500, {.maxSpeed = 60, .minSpeed = 40});
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
 
     //matchload 4
     chassis.waitUntilDone();
     chassis.tank(-10, -10);
-    pros::delay(200);
-    chassis.tank(25, 25);
-    pros::delay(1000); 
-    chassis.tank(-10, -10);
     pros::delay(150);
+    chassis.tank(25, 25);
+    pros::delay(1050); 
+    chassis.tank(-10, -10);
+    pros::delay(100);
     chassis.tank(15, 15);
-    pros::delay(600);
+    pros::delay(625);
     chassis.tank(0, 0);
 
     chassis.moveToPoint(23, 43.5, 1800, {.forwards = false, .maxSpeed = 75});
@@ -596,15 +598,15 @@ void skills(){
     // try parking
     chassis.setPose(28, 44, 90);
     pros::delay(100);
-    subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
 
+    subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
 
     chassis.moveToPoint(57.25, 34, 2000, {.maxSpeed = 65});    
     chassis.waitUntil(15);
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
 
-    chassis.moveToPoint(65.5, 8, 4000, {.minSpeed = 127});
-    pros::delay(375);
+    chassis.moveToPoint(65.5, 7.75, 4000, {.minSpeed = 127});
+    pros::delay(450);
     subsystems::matchload::extend();
     pros::delay(1200);
     subsystems::matchload::retract();
@@ -619,12 +621,12 @@ void tunePid() {
     pros::delay(100);
     
 
-    chassis.moveToPoint(-25, -34, 1300, {.maxSpeed = 85, .minSpeed = 70, .earlyExitRange = 2});
+    chassis.moveToPoint(-25, -33.5, 1300, {.maxSpeed = 85, .minSpeed = 70, .earlyExitRange = 2});
     subsystems::wing::retract();
-    chassis.moveToPose(-20, -34.5, 270, 3500, {.forwards = false, .maxSpeed = 95, .minSpeed = 60, .earlyExitRange = 4});
+    chassis.moveToPose(-20, -34, 270, 3500, {.forwards = false, .maxSpeed = 95, .minSpeed = 60, .earlyExitRange = 4});
     chassis.waitUntil(6);
     chassis.cancelMotion();
-    chassis.moveToPose(-5, -33.75, 270, 7000, {.forwards = false, .maxSpeed = 95, .minSpeed = 85});
+    chassis.moveToPose(-5, -33.25, 270, 7000, {.forwards = false, .maxSpeed = 95, .minSpeed = 85});
     
     while (chassis.getPose().x < -4) {
         pros::delay(20);
@@ -635,7 +637,7 @@ void tunePid() {
 
     pros::MotorGroup leftMotors({-7, -8, -9}, pros::MotorCartridge::blue);
     pros::MotorGroup rightMotors({2, 4, 5}, pros::MotorCartridge::blue);
-    chassis.tank(0,0);
+    chassis.tank(-30,0);
     leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
     //subsystems::wing::retract();
