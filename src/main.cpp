@@ -133,8 +133,10 @@ void opcontrol() {
         
         // autos
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            autonomous();
+            //autonomous();
             //solo_awp();
+            skillsStart();
+            //rightElim();
         }
 
         pros::delay(10);

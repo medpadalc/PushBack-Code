@@ -6,3 +6,5 @@ void left();
 void right();
 void tunePid();
 void skills();
+void skillsStart();
+void rightElim();
