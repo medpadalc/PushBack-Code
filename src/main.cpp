@@ -60,7 +60,11 @@ rd::Selector selector({
     {"Left", left},
     {"Right", right},
     {"Tune", tunePid}, 
+    {"RightElim", rightElim},
+    {"SkillsNew", skillsStart}, 
+    {"SkillsTwo", skillsTwo}, 
     {"Skills", skills}
+
 });
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -135,8 +139,10 @@ void opcontrol() {
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             //autonomous();
             //solo_awp();
-            skillsStart();
+            //skillsStart();
             //rightElim();
+            //skillsTwo();
+            skillsFour();
         }
 
         pros::delay(10);
