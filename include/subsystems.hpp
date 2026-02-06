@@ -45,7 +45,7 @@ namespace midGoalDescore {
     void toggle();
 }
 
-};
+
 
 namespace localization {
     enum class Wall {
@@ -57,3 +57,4 @@ namespace localization {
 
     void leftDistanceReset(lemlib::Chassis& chassis, Wall wall);
 }
+};

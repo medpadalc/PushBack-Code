@@ -148,7 +148,7 @@ void opcontrol() {
             skillsFour();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            localization::leftDistanceReset(chassis, localization::Wall::LEFT_X);
+            //localization::leftDistanceReset(chassis, localization::Wall::LEFT_X);
         }
 
         pros::delay(10);

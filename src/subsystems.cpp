@@ -98,7 +98,7 @@ void subsystems::midGoalDescore::toggle() {
     midGoalDescorePiston.toggle();
 }
 
-void localization::leftDistanceReset(lemlib::Chassis& chassis, Wall wall) {
+void subsystems::localization::leftDistanceReset(lemlib::Chassis& chassis, Wall wall) {
     static std::vector<pros::Distance> distanceSensors = pros::Distance::get_all_devices();
     if (distanceSensors.empty()) return;
 
