@@ -2,7 +2,6 @@
 
 pros::Motor lowerIntakeMotor(1, pros::MotorGears::rpm_600);
 pros::Motor upperIntakeMotor(-18, pros::MotorGears::rpm_600);
-pros::Optical intakeOpticalSensor(11);
 
 pros::adi::Pneumatics matchloadPiston('H',false);
 pros::adi::Pneumatics middleGoalPiston('F', true, true);
@@ -24,31 +23,7 @@ void subsystems::intake::run(GoalType goalType) {
     });
 }
 
-static constexpr int NONE = 0;
-static constexpr int RED = 1;
-static constexpr int BLUE = 2;
-
-int getColor(pros::Optical& optical) {
-    optical.set_integration_time(10);
-    optical.set_led_pwm(100);
-
-    double hue = intakeOpticalSensor.get_hue();
-    double proximity = intakeOpticalSensor.get_proximity();
-
-    if (proximity > 150 && (hue > 180 && hue < 260)) {
-        return RED;
-    }
-    if (proximity > 150 && (hue > 330 || hue < 30)) {
-        return BLUE;
-    }
-    return NONE;
-}
-
-
 void subsystems::intake::iterate(GoalType goalType) {
-    intakeOpticalSensor.set_integration_time(10);
-    intakeOpticalSensor.set_led_pwm(100);
-
     switch (goalType) {
         case GoalType::NONE:
             middleGoalPiston.extend();
@@ -122,3 +97,39 @@ void subsystems::midGoalDescore::retract() {
 void subsystems::midGoalDescore::toggle() {
     midGoalDescorePiston.toggle();
 }
+
+void localization::leftDistanceReset(lemlib::Chassis& chassis, Wall wall) {
+    static std::vector<pros::Distance> distanceSensors = pros::Distance::get_all_devices();
+    if (distanceSensors.empty()) return;
+
+    static pros::Distance leftDistanceSensor = distanceSensors[0];
+    static double offset = 4.25;
+
+    double distance = leftDistanceSensor.get() / 25.4;
+    if (distance == 9999) return;
+
+    double effectiveDistance = distance + offset;
+
+    lemlib::Pose pose = chassis.getPose();
+    double heading = pose.theta;
+
+    switch (wall) {
+        case Wall::LEFT_X:
+            effectiveDistance *= std::cos(heading * (M_PI / 180));
+            chassis.setPose(-70 + effectiveDistance, pose.y, pose.theta);
+            break;
+        case Wall::RIGHT_X:
+            effectiveDistance *= std::cos((heading - 180) * (M_PI / 180));
+            chassis.setPose(70 - effectiveDistance, pose.y, pose.theta);
+            break;
+        case Wall::TOP_Y:
+            effectiveDistance *= std::cos((heading - 90) * (M_PI / 180));
+            chassis.setPose(pose.x, 70 - effectiveDistance, pose.theta);
+            break;
+        case Wall::BOTTOM_Y:
+            effectiveDistance *= std::cos((heading - 270) * (M_PI / 180));
+            chassis.setPose(pose.x, -70 + effectiveDistance, pose.theta);
+            break;
+    }
+}
+

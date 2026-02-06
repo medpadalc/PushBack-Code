@@ -2,9 +2,13 @@
 
 #include "pros/motor_group.hpp"
 #include "pros/optical.hpp"
+#include "pros/distance.hpp"
 #include "pros/adi.hpp"
+#include "Eigen/Geometry"
 #include <memory>
 #include <utility>
+#include <cmath>
+#include "lemlib/chassis/chassis.hpp"
 
 namespace subsystems {
 
@@ -42,3 +46,14 @@ namespace midGoalDescore {
 }
 
 };
+
+namespace localization {
+    enum class Wall {
+        LEFT_X,
+        RIGHT_X,
+        TOP_Y,
+        BOTTOM_Y
+    };
+
+    void leftDistanceReset(lemlib::Chassis& chassis, Wall wall);
+}
