@@ -860,7 +860,9 @@ void skillsFour(){
     chassis.waitUntilDone();
     pros::delay(300);
 
-    subsystems::intake::run(subsystems::intake::GoalType::NONE);
+    //subsystems::intake::run(subsystems::intake::GoalType::NONE);
+
+    subsystems::matchload::extend();
 
     chassis.moveToPose(9.5, -3.5, 135, 1500, {.forwards = false, .maxSpeed = 60, .minSpeed = 30});
     chassis.waitUntil(3);

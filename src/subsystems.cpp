@@ -24,6 +24,7 @@ void subsystems::intake::run(GoalType goalType) {
 }
 
 void subsystems::intake::iterate(GoalType goalType) {
+    lowerIntakeMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     switch (goalType) {
         case GoalType::NONE:
             middleGoalPiston.extend();
@@ -103,31 +104,32 @@ void subsystems::localization::leftDistanceReset(lemlib::Chassis& chassis, Wall 
     if (distanceSensors.empty()) return;
 
     static pros::Distance leftDistanceSensor = distanceSensors[0];
-    static double offset = 4.25;
+    static double xOffset = 4.25;
+    static double yOffset = 3.00;
 
     double distance = leftDistanceSensor.get() / 25.4;
     if (distance == 9999) return;
 
-    double effectiveDistance = distance + offset;
+    double effectiveDistance = distance + xOffset;
 
     lemlib::Pose pose = chassis.getPose();
-    double heading = pose.theta;
+    double heading = pose.theta * (M_PI / 180);
 
     switch (wall) {
-        case Wall::LEFT_X:
-            effectiveDistance *= std::cos(heading * (M_PI / 180));
+    case Wall::LEFT_X:
+            effectiveDistance = effectiveDistance * std::cos(heading) + yOffset * std::sin(heading);
             chassis.setPose(-70 + effectiveDistance, pose.y, pose.theta);
             break;
         case Wall::RIGHT_X:
-            effectiveDistance *= std::cos((heading - 180) * (M_PI / 180));
+            effectiveDistance = effectiveDistance * std::cos(heading - 180) + yOffset * std::sin(heading - 180);
             chassis.setPose(70 - effectiveDistance, pose.y, pose.theta);
             break;
         case Wall::TOP_Y:
-            effectiveDistance *= std::cos((heading - 90) * (M_PI / 180));
+            effectiveDistance = effectiveDistance * std::cos(heading - 90) + yOffset * std::sin(heading - 90);
             chassis.setPose(pose.x, 70 - effectiveDistance, pose.theta);
             break;
         case Wall::BOTTOM_Y:
-            effectiveDistance *= std::cos((heading - 270) * (M_PI / 180));
+            effectiveDistance = effectiveDistance * std::cos(heading - 270) + yOffset * std::sin(heading - 270);
             chassis.setPose(pose.x, -70 + effectiveDistance, pose.theta);
             break;
     }
