@@ -104,7 +104,7 @@ void subsystems::localization::leftDistanceReset(lemlib::Chassis& chassis, Wall 
     if (distanceSensors.empty()) return;
 
     static pros::Distance leftDistanceSensor = distanceSensors[0];
-    static double xOffset = 4.25;
+    static double xOffset = 5.25;
     static double yOffset = 3.00;
 
     double distance = leftDistanceSensor.get() / 25.4;
