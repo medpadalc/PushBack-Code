@@ -86,7 +86,10 @@ void initialize() {
     pros::Task{[&]() {
         while (true) {     
             lemlib::Pose pose = chassis.getPose(false, false);
-            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+
+            static pros::Motor lowerIntakeMotor(1, pros::MotorGears::rpm_600);
+            //controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+            controller.print(0, 0, "%d", lowerIntakeMotor.get_voltage());
             pros::delay(50);
         }
     }};
@@ -101,7 +104,7 @@ void initialize() {
  * and applies movement commands to the robot's motors.
  */
 void opcontrol() {
-     leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+    leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
     rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
     subsystems::intake::stop();
     while (true) {
@@ -146,9 +149,10 @@ void opcontrol() {
             //rightElim();
             //skillsTwo();
             skillsFour();
+            subsystems::intake::stop();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            //localization::leftDistanceReset(chassis, localization::Wall::LEFT_X);
+            subsystems::localization::leftDistanceReset(chassis, subsystems::localization::Wall::BOTTOM_Y);
         }
 
         pros::delay(10);
