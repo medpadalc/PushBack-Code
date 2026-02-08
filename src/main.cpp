@@ -88,9 +88,9 @@ void initialize() {
             lemlib::Pose pose = chassis.getPose(false, false);
 
             static pros::Motor lowerIntakeMotor(1, pros::MotorGears::rpm_600);
-            //controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
-            controller.print(0, 0, "%d", lowerIntakeMotor.get_voltage());
-            pros::delay(50);
+            controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+            //controller.print(0, 0, "%.2f", lowerIntakeMotor.get_efficiency());
+            pros::delay(500);
         }
     }};
     

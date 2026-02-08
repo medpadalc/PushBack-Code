@@ -24,6 +24,25 @@ void subsystems::intake::run(GoalType goalType) {
 }
 
 void subsystems::intake::iterate(GoalType goalType) {
+    static bool antiJam = false;
+    static std::uint32_t startJam = 0;
+    static GoalType previousMode = GoalType::NONE;
+    static std::uint32_t changedModeAt = 0;
+
+    if (goalType != previousMode) {
+        changedModeAt = pros::millis();
+    }
+    previousMode = goalType;
+
+    if (pros::millis() - startJam > 50) {
+        antiJam = false;
+    }
+    if (antiJam) {
+        lowerIntakeMotor.move(-127);
+        upperIntakeMotor.move(-127);
+        return;
+    }
+
     switch (goalType) {
         case GoalType::NONE:
             middleGoalPiston.extend();
@@ -37,13 +56,13 @@ void subsystems::intake::iterate(GoalType goalType) {
             return;
         case GoalType::MEDIUM_GOAL:
             middleGoalPiston.retract();
-            lowerIntakeMotor.move_velocity(450);
+            lowerIntakeMotor.move(127);
             upperIntakeMotor.move(-127);
             break;
         case GoalType::HOLD_BALLS:
             middleGoalPiston.extend();
             lowerIntakeMotor.move(127);
-            upperIntakeMotor.move_velocity(-100);
+            upperIntakeMotor.move_velocity(-30);
             break;
         case GoalType::LONG_GOAL:
             middleGoalPiston.extend();
@@ -52,9 +71,9 @@ void subsystems::intake::iterate(GoalType goalType) {
             break;
     }
 
-    if (lowerIntakeMotor.get_efficiency() < 1.0) {
-        lowerIntakeMotor.move(-127);
-        upperIntakeMotor.move(-127);
+    if (pros::millis() - changedModeAt > 750 && lowerIntakeMotor.get_efficiency() < 0.1) {
+        antiJam = true;
+        startJam = pros::millis();
     }
 }
 
