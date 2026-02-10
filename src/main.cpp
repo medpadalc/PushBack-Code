@@ -143,12 +143,12 @@ void opcontrol() {
         
         // autos
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            //autonomous();
+            autonomous();
             //solo_awp();
             //skillsStart();
             //rightElim();
             //skillsTwo();
-            skillsFour();
+            //skillsFour();
             subsystems::intake::stop();
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
