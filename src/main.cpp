@@ -59,6 +59,7 @@ rd::Selector selector({
     {"Solo AWP", solo_awp},
     {"Left", left},
     {"Right", right},
+    {"Left2", betterLeft},
     {"RightElim", rightElim},
     {"Skills", skills},
     {"Tune", tunePid},

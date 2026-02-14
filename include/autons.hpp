@@ -4,6 +4,7 @@
 void solo_awp();
 void left();
 void right();
+void betterLeft();
 void tunePid();
 void skills();
 void skillsStart();
