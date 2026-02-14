@@ -245,13 +245,13 @@ void right() {
     chassis.waitUntilDone();
 
     chassis.tank(10, 10);
-    pros::delay(150);
+    pros::delay(140); //150 to 140
 
-    chassis.moveToPoint(-10, -42.5, 500, {.forwards = false, .maxSpeed = 80, .minSpeed = 40, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, -42, 500, {.forwards = false, .maxSpeed = 80, .minSpeed = 40, .earlyExitRange = 1}); //-42.5 to -42
     chassis.waitUntil(15);
 
     chassis.cancelMotion();
-    chassis.moveToPoint(-10, -42.5, 1000, {.forwards = false, .maxSpeed = 40, .minSpeed = 25, .earlyExitRange = 1});
+    chassis.moveToPoint(-10, -42, 1000, {.forwards = false, .maxSpeed = 40, .minSpeed = 25, .earlyExitRange = 1}); //-42.5 to -42
     chassis.waitUntil(10);
 
     subsystems::intake::run(subsystems::intake::GoalType::LOW_GOAL);
