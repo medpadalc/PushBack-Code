@@ -59,15 +59,14 @@ rd::Selector selector({
     {"Solo AWP", solo_awp},
     {"Left", left},
     {"Right", right},
-    {"Tune", tunePid}, 
+    {"Skills", skills},
     {"RightElim", rightElim},
+    {"Tune", tunePid},
     {"SkillsNew", skillsStart}, 
     {"SkillsTwo", skillsTwo}, 
     {"SkillsThree", skillsThree}, 
     {"SkillsFour", skillsFour}, 
-    {"SkillsFive", skillsFive},
-    {"Skills", skills}
-
+    {"SkillsFive", skillsFive}
 });
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
