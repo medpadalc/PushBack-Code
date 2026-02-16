@@ -242,7 +242,7 @@ void betterLeft() {
     chassis.moveToPoint(-73.5, 47, 1100, {.maxSpeed = 53, .minSpeed = 42, .earlyExitRange = 2});
     chassis.waitUntilDone();
     chassis.tank(40, 40);
-    pros::delay(500);
+    pros::delay(600);
     chassis.tank(0, 0);
     chassis.moveToPose(-7.5, 9.5, 315, 2500, {.forwards = false});
     chassis.waitUntil(10);
@@ -262,7 +262,7 @@ void betterLeft() {
     chassis.waitUntilDone();
     pros::delay(200);
 
-    chassis.moveToPoint(-29, 34, 2000);
+    chassis.moveToPoint(-29, 35.25, 2000);
     chassis.waitUntilDone();
 
     subsystems::midGoalDescore::retract();
@@ -270,9 +270,9 @@ void betterLeft() {
     chassis.turnToHeading(91, 1000, {.minSpeed = 30, .earlyExitRange = 2});
     chassis.waitUntilDone();
 
-    chassis.moveToPoint(-7, 36, 5000);
+    chassis.moveToPoint(-7, 36.75, 5000);
     chassis.waitUntilDone();
-    chassis.tank(30, -10);
+    chassis.tank(30, -20);
     pros::delay(100000);
 }
 

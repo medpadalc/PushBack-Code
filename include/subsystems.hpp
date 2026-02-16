@@ -9,6 +9,7 @@
 #include <utility>
 #include <cmath>
 #include "lemlib/chassis/chassis.hpp"
+#include "lemlib/util.hpp"
 
 namespace subsystems {
 

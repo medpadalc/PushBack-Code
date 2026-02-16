@@ -1,5 +1,6 @@
 #include "subsystems.hpp"
 
+
 pros::Motor lowerIntakeMotor(1, pros::MotorGears::rpm_600);
 pros::Motor upperIntakeMotor(-18, pros::MotorGears::rpm_600);
 
@@ -56,8 +57,8 @@ void subsystems::intake::iterate(GoalType goalType) {
             return;
         case GoalType::MEDIUM_GOAL:
             middleGoalPiston.retract();
-            lowerIntakeMotor.move(92);
-            upperIntakeMotor.move(-55);
+            lowerIntakeMotor.move_velocity(450);
+            upperIntakeMotor.move_velocity(-300);
             break;
         case GoalType::HOLD_BALLS:
             middleGoalPiston.extend();
@@ -136,7 +137,7 @@ void subsystems::localization::leftDistanceReset(lemlib::Chassis& chassis, Wall 
     double effectiveDistance = distance + xOffset;
 
     lemlib::Pose pose = chassis.getPose();
-    double heading = pose.theta * (M_PI / 180);
+    double heading = lemlib::degToRad(pose.theta);
 
     switch (wall) {
     case Wall::LEFT_X:
