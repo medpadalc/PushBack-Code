@@ -57,7 +57,7 @@ void subsystems::intake::iterate(GoalType goalType) {
             return;
         case GoalType::MEDIUM_GOAL:
             middleGoalPiston.retract();
-            lowerIntakeMotor.move_velocity(600);
+            lowerIntakeMotor.move(127);
             upperIntakeMotor.move(-127);
             break;
         case GoalType::HOLD_BALLS:
