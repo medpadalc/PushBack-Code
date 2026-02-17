@@ -155,7 +155,7 @@ public:
             const float distTarget = pose.distance(target);
 
             // check if the robot is close enough to the target to start settling
-            if (distTarget < 4.0 && close == false) {
+            if (distTarget < 7.5 && close == false) {
                 close = true;
                 params.maxSpeed = fmax(fabs(prevLateralOut), 60);
             }

@@ -58,7 +58,7 @@ void subsystems::intake::iterate(GoalType goalType) {
         case GoalType::MEDIUM_GOAL:
             middleGoalPiston.retract();
             lowerIntakeMotor.move_velocity(450);
-            upperIntakeMotor.move_velocity(-300);
+            upperIntakeMotor.move(-127);
             break;
         case GoalType::HOLD_BALLS:
             middleGoalPiston.extend();
@@ -129,7 +129,7 @@ void subsystems::localization::leftDistanceReset(lemlib::Chassis& chassis, Wall 
 
     static pros::Distance leftDistanceSensor = distanceSensors[0];
     static double xOffset = 5;
-    static double yOffset = 3.00;
+    static double yOffset = 1;
 
     double distance = leftDistanceSensor.get() / 25.4;
     if (distance == 9999) return;

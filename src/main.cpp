@@ -89,8 +89,9 @@ void initialize() {
 
             static pros::Motor lowerIntakeMotor(1, pros::MotorGears::rpm_600);
             controller.print(0, 0, "X: %.1f Y: %.1f θ: %.1f", pose.x, pose.y, pose.theta);
+            printf("%.1f, %.1f, %.1f, %d\n", pose.x, pose.y, pose.theta, pros::millis());
             //controller.print(0, 0, "%.2f", lowerIntakeMotor.get_efficiency());
-            pros::delay(500);
+            pros::delay(10);
         }
     }};
     
@@ -104,8 +105,7 @@ void initialize() {
  * and applies movement commands to the robot's motors.
  */
 void opcontrol() {
-    leftMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
-    rightMotors.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
     subsystems::intake::stop();
     while (true) {
         // drivetrain
@@ -143,6 +143,7 @@ void opcontrol() {
         
         // autos
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+            chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
             autonomous();
             //solo_awp();
             //skillsStart();
@@ -150,6 +151,7 @@ void opcontrol() {
             //skillsTwo();
             //skillsFour();
             subsystems::intake::stop();
+            chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
         }
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
             subsystems::localization::leftDistanceReset(chassis, subsystems::localization::Wall::BOTTOM_Y);
@@ -181,5 +183,7 @@ void competition_initialize() {}
  * This function is executed when the robot enters autonomous mode in competition.
  */
 void autonomous() {
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     selector.run_auton();
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 }
