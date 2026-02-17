@@ -944,7 +944,7 @@ void skillsThree(){
 
     // hood push
     chassis.moveToPoint(29.5, -48, 1100, {.maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 0.5}); //first num from 33 to 29.5
-    chassis.moveToPoint(20, -48, 1300, {.forwards = false, .maxSpeed = 40}); //first num from 25 to 15 and 850 to 1300
+    chassis.moveToPoint(20, -48, 800, {.forwards = false, .maxSpeed = 40}); //first num from 25 to 15 and 850 to 1300
     chassis.waitUntilDone();
     chassis.setPose(28, 44, 90);
 
