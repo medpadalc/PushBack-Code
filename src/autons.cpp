@@ -982,7 +982,7 @@ void skillsFour() {
     chassis.swingToHeading(180, lemlib::DriveSide::RIGHT, 1000, {.direction = lemlib::AngularDirection::CW_CLOCKWISE, .minSpeed = 30, .earlyExitRange = 3});
     // clear park zone
     chassis.moveToPoint(68, 25, 1000, {.maxSpeed = 90, .minSpeed = 80, .earlyExitRange = 1.5});
-    chassis.moveToPoint(68, -12.75, 3000, {.maxSpeed = 90}); //69 to 68 and 4000 to 3000
+    chassis.moveToPoint(68, -15.75, 3000, {.maxSpeed = 90}); //69 to 68 and 4000 to 3000
     chassis.waitUntilDone();
     pros::delay(400); //400 to 300
     subsystems::localization::leftDistanceReset(chassis, subsystems::localization::Wall::RIGHT_X);
