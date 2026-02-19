@@ -911,7 +911,7 @@ void skillsTwo(){
 void hoodPush() {
     chassis.setPose(28, 48, 90);
     // hood push
-    chassis.moveToPoint(31, 48, 1100, {.maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 0.5}); //first num from 33 to 29.5
+    chassis.moveToPoint(31, 48, 1100, {.maxSpeed = 45, .minSpeed = 5, .earlyExitRange = 0.5}); //first num from 33 to 29.5
     chassis.moveToPoint(20, 48, 1000, {.forwards = false, .maxSpeed = 15}); //first num from 25 to 15 and 850 to 1300
     chassis.waitUntilDone();
 }
