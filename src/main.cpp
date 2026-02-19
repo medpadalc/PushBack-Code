@@ -135,6 +135,10 @@ void opcontrol() {
         }
         subsystems::intake::iterate(goal);
 
+        if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+            hoodPush();
+        }
+
 
         // pneumatics
         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {

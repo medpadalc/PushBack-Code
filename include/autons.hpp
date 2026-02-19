@@ -5,6 +5,7 @@ void solo_awp();
 void left();
 void right();
 void betterLeft();
+void hoodPush();
 void tunePid();
 void skills();
 void skillsStart();

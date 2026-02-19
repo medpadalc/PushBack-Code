@@ -908,6 +908,14 @@ void skillsTwo(){
     skillsThree();
 }
 
+void hoodPush() {
+    chassis.setPose(28, 48, 90);
+    // hood push
+    chassis.moveToPoint(31, 48, 1100, {.maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 0.5}); //first num from 33 to 29.5
+    chassis.moveToPoint(20, 48, 800, {.forwards = false, .maxSpeed = 30}); //first num from 25 to 15 and 850 to 1300
+    chassis.waitUntilDone();
+}
+
 void skillsThree(){
     chassis.setPose(28, 48, 90);
     subsystems::intake::run(subsystems::intake::GoalType::HOLD_BALLS);
@@ -936,12 +944,7 @@ void skillsThree(){
     chassis.tank(-127,-127);
     pros::delay(2100); //1800 to 2050
     chassis.tank(0,0);
-
-
-    // hood push
-    chassis.moveToPoint(31, 48, 1100, {.maxSpeed = 75, .minSpeed = 60, .earlyExitRange = 0.5}); //first num from 33 to 29.5
-    chassis.moveToPoint(20, 48, 800, {.forwards = false, .maxSpeed = 50}); //first num from 25 to 15 and 850 to 1300
-    chassis.waitUntilDone();
+    hoodPush();
     chassis.setPose(28, 44, 90);
 }
 void skillsFour() {
