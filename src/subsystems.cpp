@@ -60,16 +60,25 @@ void subsystems::intake::iterate(GoalType goalType) {
             lowerIntakeMotor.move(127);
             upperIntakeMotor.move(-127);
             break;
+        case GoalType::MEDIUM_GOAL_SLOW:
+            middleGoalPiston.retract();
+            lowerIntakeMotor.move_velocity(400);
+            upperIntakeMotor.move_velocity(-400);
+        break;
         case GoalType::HOLD_BALLS:
             middleGoalPiston.extend();
             lowerIntakeMotor.move(127);
-            upperIntakeMotor.move_velocity(-30);
+            upperIntakeMotor.move_velocity(-60);
             break;
         case GoalType::LONG_GOAL:
             middleGoalPiston.extend();
             lowerIntakeMotor.move(127);
             upperIntakeMotor.move(127);
             break;
+        case GoalType::LONG_GOAL_SLOW:
+            middleGoalPiston.extend();
+            lowerIntakeMotor.move(127);
+            upperIntakeMotor.move(70);
     }
 
     if (pros::millis() - changedModeAt > 750 && lowerIntakeMotor.get_efficiency() < 0.1) {

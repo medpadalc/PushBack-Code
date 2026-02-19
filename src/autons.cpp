@@ -931,7 +931,7 @@ void skillsThree(){
     chassis.moveToPoint(23, 48, 1000, {.forwards = false, .maxSpeed = 60, .earlyExitRange = 0.5});
     chassis.waitUntil(22);
     //outtake balls
-    subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL);
+    subsystems::intake::run(subsystems::intake::GoalType::LONG_GOAL_SLOW);
     chassis.waitUntilDone();
     chassis.tank(-127,-127);
     pros::delay(2100); //1800 to 2050
@@ -1013,7 +1013,7 @@ void skillsFour() {
     pros::delay(150); //200 to 100
 
     // in middle goal
-    subsystems::intake::run(subsystems::intake::GoalType::MEDIUM_GOAL);
+    subsystems::intake::run(subsystems::intake::GoalType::MEDIUM_GOAL_SLOW);
     chassis.tank(-30, -30);
     pros::delay(2700); // 2400 to 3500
 

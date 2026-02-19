@@ -118,6 +118,12 @@ void opcontrol() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1) && controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
             goal = subsystems::intake::GoalType::LONG_GOAL;
         }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            goal = subsystems::intake::GoalType::LONG_GOAL_SLOW;
+        }
+        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+            goal = subsystems::intake::GoalType::MEDIUM_GOAL_SLOW;
+        }
         else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
             goal = subsystems::intake::GoalType::MEDIUM_GOAL;
         }
