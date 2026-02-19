@@ -837,7 +837,7 @@ void skillsStart(){
 
     chassis.waitUntil(10);
     chassis.cancelMotion();
-    chassis.moveToPoint(-67.5, 46, 700, {.maxSpeed = 50, .minSpeed = 40, .earlyExitRange = 1.5}); //44.5 to 46 and 450 to 700
+    chassis.moveToPoint(-67.5, 47, 700, {.maxSpeed = 50, .minSpeed = 40, .earlyExitRange = 1.5}); //46 to 47 and 450 to 700
     
     // facing goal
     chassis.waitUntilDone();
@@ -850,14 +850,14 @@ void skillsStart(){
     chassis.moveToPoint(-58, 44.5, 1500, {.forwards = false, .maxSpeed = 80, .earlyExitRange = 0.5});
     chassis.moveToPoint(-35, 55.5, 1500, {.forwards = false, .maxSpeed = 90, .minSpeed = 40, .earlyExitRange = 1});
 
-    chassis.moveToPoint(29, 57.5, 2000, {.forwards = false, .maxSpeed = 100, .minSpeed = 40, .earlyExitRange = 1.5});
+    chassis.moveToPoint(29, 57, 2000, {.forwards = false, .maxSpeed = 100, .minSpeed = 40, .earlyExitRange = 1.5}); //57.5 to 57
     subsystems::matchload::retract();
 
     // turn to get into long goal scoring
 
     chassis.moveToPoint(36, 47.5, 1500, {.forwards = false, .maxSpeed = 90, .minSpeed = 50, .earlyExitRange = 1.5});
 
-    chassis.moveToPoint(20, 46, 1000, {.forwards = false, .maxSpeed = 90, .minSpeed = 50,  .earlyExitRange = 0.5});
+    chassis.moveToPoint(20, 45.5, 1000, {.forwards = false, .maxSpeed = 90, .minSpeed = 50,  .earlyExitRange = 0.5}); //46 to 45.5
     
     subsystems::matchload::extend();
 
