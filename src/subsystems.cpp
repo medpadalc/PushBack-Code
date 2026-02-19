@@ -78,7 +78,7 @@ void subsystems::intake::iterate(GoalType goalType) {
         case GoalType::LONG_GOAL_SLOW:
             middleGoalPiston.extend();
             lowerIntakeMotor.move(127);
-            upperIntakeMotor.move(70);
+            upperIntakeMotor.move(80);
     }
 
     if (pros::millis() - changedModeAt > 750 && lowerIntakeMotor.get_efficiency() < 0.1) {
